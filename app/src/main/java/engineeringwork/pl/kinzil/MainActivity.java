@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity
 
     private ViewPager mViewPager;
     private SectionsPagerAdapter mSectionsPagerAdapter;
-    private String[] tabs = {"Connect", "Counter", "Map", "History"};
+    private String[] tabs = {"Counter", "Map"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,17 +110,13 @@ public class MainActivity extends AppCompatActivity
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-        private BluetoothFragment bluetoothFragment;
         private CounterFragment counterFragment;
         private MapFragment mapFragment;
-        private HistoryFragment historyFragment;
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
-            bluetoothFragment = new BluetoothFragment();
             counterFragment = new CounterFragment();
             mapFragment = new MapFragment();
-            historyFragment = new HistoryFragment();
         }
 
         @Override
@@ -128,13 +124,9 @@ public class MainActivity extends AppCompatActivity
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
             if (position == 0) {
-                return bluetoothFragment;
-            } else if (position == 1) {
                 return counterFragment;
-            } else if (position == 2) {
+            } else if (position == 1) {
                 return mapFragment;
-            } else if (position == 3) {
-                return historyFragment;
             }
             return null;
         }
