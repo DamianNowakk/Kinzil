@@ -17,6 +17,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.FrameLayout;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -24,6 +25,8 @@ public class MainActivity extends AppCompatActivity
     private ViewPager mViewPager;
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private String[] tabs = {"Counter", "Map"};
+    private TabLayout tabLayout;
+    private FrameLayout frameLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,12 +36,13 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        frameLayout = (FrameLayout) findViewById(R.id.fragment_layout);
         //fragments
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
         //fragments
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -56,7 +60,12 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else {
+        } else if(mViewPager.getVisibility() == View.GONE && tabLayout.getVisibility() == View.GONE) {
+            tabLayout.setVisibility(View.VISIBLE);
+            mViewPager.setVisibility(View.VISIBLE);
+            frameLayout.setVisibility(View.GONE);
+        }
+        else {
             super.onBackPressed();
         }
     }
@@ -89,12 +98,18 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
+        tabLayout.setVisibility(View.GONE);
+        mViewPager.setVisibility(View.GONE);
+        frameLayout.setVisibility(View.VISIBLE);
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+
         if (id == R.id.nav_connection) {
-            // Handle the camera action
+            fragmentManager.beginTransaction().replace(R.id.fragment_layout, new BluetoothFragment()).commit();
         } else if (id == R.id.nav_settings) {
-
+            fragmentManager.beginTransaction().replace(R.id.fragment_layout, new SettingsFragment()).commit();
         } else if (id == R.id.nav_history) {
-
+            fragmentManager.beginTransaction().replace(R.id.fragment_layout, new HistoryFragment()).commit();
         } else if (id == R.id.nav_aboutus) {
 
         }
@@ -106,8 +121,8 @@ public class MainActivity extends AppCompatActivity
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-        private CounterFragment counterFragment;
-        private MapFragment mapFragment;
+        public CounterFragment counterFragment;
+        public MapFragment mapFragment;
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
