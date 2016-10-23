@@ -17,13 +17,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.FrameLayout;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private ViewPager mViewPager;
     private SectionsPagerAdapter mSectionsPagerAdapter;
-    private String[] tabs = {"Connect", "Counter", "Map", "History"};
+    private String[] tabs = {"Counter", "Map"};
+    private TabLayout tabLayout;
+    private FrameLayout frameLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,12 +36,13 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        frameLayout = (FrameLayout) findViewById(R.id.fragment_layout);
         //fragments
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
         //fragments
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -56,7 +60,12 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else {
+        } else if(mViewPager.getVisibility() == View.GONE && tabLayout.getVisibility() == View.GONE) {
+            tabLayout.setVisibility(View.VISIBLE);
+            mViewPager.setVisibility(View.VISIBLE);
+            frameLayout.setVisibility(View.GONE);
+        }
+        else {
             super.onBackPressed();
         }
     }
@@ -89,17 +98,19 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        tabLayout.setVisibility(View.GONE);
+        mViewPager.setVisibility(View.GONE);
+        frameLayout.setVisibility(View.VISIBLE);
 
-        } else if (id == R.id.nav_slideshow) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
 
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
+        if (id == R.id.nav_connection) {
+            fragmentManager.beginTransaction().replace(R.id.fragment_layout, new BluetoothFragment()).commit();
+        } else if (id == R.id.nav_settings) {
+            fragmentManager.beginTransaction().replace(R.id.fragment_layout, new SettingsFragment()).commit();
+        } else if (id == R.id.nav_history) {
+            fragmentManager.beginTransaction().replace(R.id.fragment_layout, new HistoryFragment()).commit();
+        } else if (id == R.id.nav_aboutus) {
 
         }
 
@@ -110,17 +121,13 @@ public class MainActivity extends AppCompatActivity
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-        private BluetoothFragment bluetoothFragment;
-        private CounterFragment counterFragment;
-        private MapFragment mapFragment;
-        private HistoryFragment historyFragment;
+        public CounterFragment counterFragment;
+        public MapFragment mapFragment;
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
-            bluetoothFragment = new BluetoothFragment();
             counterFragment = new CounterFragment();
             mapFragment = new MapFragment();
-            historyFragment = new HistoryFragment();
         }
 
         @Override
@@ -128,13 +135,9 @@ public class MainActivity extends AppCompatActivity
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
             if (position == 0) {
-                return bluetoothFragment;
-            } else if (position == 1) {
                 return counterFragment;
-            } else if (position == 2) {
+            } else if (position == 1) {
                 return mapFragment;
-            } else if (position == 3) {
-                return historyFragment;
             }
             return null;
         }
