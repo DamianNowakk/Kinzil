@@ -12,6 +12,7 @@ import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -20,9 +21,10 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 
-public class MapFragment extends Fragment implements OnMapReadyCallback {
+public class MapFragment extends Fragment implements OnMapReadyCallback, View.OnClickListener  {
     View view;
     private GoogleMap mMap;
+    private Button button;
 
     @Nullable
     @Override
@@ -35,6 +37,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         transaction.replace(R.id.mapView, fragment);
         transaction.commit();
         fragment.getMapAsync(this);
+
+        //button = (Button) view.findViewById(R.id.button);
+        button.setOnClickListener(this);
 
         return view;
     }
@@ -58,14 +63,23 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         mMap.getUiSettings().setIndoorLevelPickerEnabled(false);
         mMap.getUiSettings().setMapToolbarEnabled(false);
         mMap.getUiSettings().setRotateGesturesEnabled(false);
-        mMap.getUiSettings().setZoomControlsEnabled(false);
+        mMap.getUiSettings().setZoomControlsEnabled(true);
 
         mMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
             @Override
             public void onMyLocationChange(Location location) {
-                CameraUpdate cu = CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 18);
+                CameraUpdate cu = CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 16);
                 mMap.animateCamera(cu);
             }
         });
+
+
+
+
+    }
+
+    @Override
+    public void onClick(View v) {
+        mMap.setOnMyLocationChangeListener(null);
     }
 }
