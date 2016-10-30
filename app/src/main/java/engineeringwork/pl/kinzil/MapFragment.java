@@ -2,6 +2,7 @@ package engineeringwork.pl.kinzil;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -25,12 +26,20 @@ import com.google.android.gms.maps.model.LatLng;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MenuInflater;
-
+import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
+import android.view.ViewGroup.LayoutParams;
+import android.graphics.drawable.ColorDrawable;
+import android.view.WindowManager;
+import android.widget.Switch;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback, View.OnClickListener  {
     View view;
     private GoogleMap mMap;
     private Button button;
+    private PopupWindow popupWindow;
+    private LayoutInflater layoutInflater;
+    private RelativeLayout relativeLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,9 +56,29 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if(id == R.id.map_settings){
-            return true;
+            showPopup();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void showPopup() {
+        View popupView = getActivity().getLayoutInflater().inflate(R.layout.map_popup, null);
+        PopupWindow popupWindow = new PopupWindow(popupView, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        Switch tv = (Switch) popupView.findViewById(R.id.switch1);
+        tv.setChecked(true);
+        // Initialize more widgets from `popup_layout.xml`
+        //....
+        popupWindow.setWidth(400);
+        popupWindow.setHeight(180);
+        popupWindow.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
+        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+        View container = (View) popupWindow.getContentView().getParent();
+        WindowManager wm = (WindowManager) getActivity().getSystemService(Context.WINDOW_SERVICE);
+        WindowManager.LayoutParams p = (WindowManager.LayoutParams) container.getLayoutParams();
+        p.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+        p.dimAmount = 0.8f;
+        wm.updateViewLayout(container, p);
+
     }
 
     @Nullable
