@@ -27,58 +27,21 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MenuInflater;
 import android.widget.PopupWindow;
-import android.widget.RelativeLayout;
 import android.view.ViewGroup.LayoutParams;
 import android.graphics.drawable.ColorDrawable;
 import android.view.WindowManager;
 import android.widget.Switch;
 
-public class MapFragment extends Fragment implements OnMapReadyCallback, View.OnClickListener  {
+public class MapFragment extends Fragment implements OnMapReadyCallback {
     View view;
     private GoogleMap mMap;
     private Button button;
-    private PopupWindow popupWindow;
-    private LayoutInflater layoutInflater;
-    private RelativeLayout relativeLayout;
+    private PopUpMapMenu popUpMapMenu;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.map, menu);  // Use filter.xml from step 1
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if(id == R.id.map_settings){
-            showPopup();
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    public void showPopup() {
-        View popupView = getActivity().getLayoutInflater().inflate(R.layout.map_popup, null);
-        PopupWindow popupWindow = new PopupWindow(popupView, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-        Switch tv = (Switch) popupView.findViewById(R.id.switch1);
-        tv.setChecked(true);
-        // Initialize more widgets from `popup_layout.xml`
-        //....
-        popupWindow.setWidth(400);
-        popupWindow.setHeight(180);
-        popupWindow.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
-        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
-        View container = (View) popupWindow.getContentView().getParent();
-        WindowManager wm = (WindowManager) getActivity().getSystemService(Context.WINDOW_SERVICE);
-        WindowManager.LayoutParams p = (WindowManager.LayoutParams) container.getLayoutParams();
-        p.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-        p.dimAmount = 0.8f;
-        wm.updateViewLayout(container, p);
-
     }
 
     @Nullable
@@ -93,10 +56,24 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
         transaction.commit();
         fragment.getMapAsync(this);
 
-        button = (Button) view.findViewById(R.id.button);
-        button.setOnClickListener(this);
+        popUpMapMenu = new PopUpMapMenu(getActivity());
 
         return view;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.map, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if(id == R.id.map_settings){
+            popUpMapMenu.show();
+
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -110,7 +87,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
             if (ContextCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION)
                     == PackageManager.PERMISSION_GRANTED) {
                 mMap.setMyLocationEnabled(true);
-
             }
         }
 
@@ -119,18 +95,30 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
         mMap.getUiSettings().setMapToolbarEnabled(false);
         mMap.getUiSettings().setRotateGesturesEnabled(false);
         mMap.getUiSettings().setZoomControlsEnabled(true);
+        setMap();
 
-        mMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
-            @Override
-            public void onMyLocationChange(Location location) {
-                CameraUpdate cu = CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 16);
-                mMap.animateCamera(cu);
-            }
-        });
     }
 
-    @Override
-    public void onClick(View v) {
-        mMap.setOnMyLocationChangeListener(null);
+    private void setMap()
+    {
+        tracking(popUpMapMenu.getIsTracking());
+    }
+
+    private void tracking(boolean isTracking)
+    {
+        if(isTracking)
+        {
+            mMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
+                @Override
+                public void onMyLocationChange(Location location) {
+                    CameraUpdate cu = CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 16);
+                    mMap.animateCamera(cu);
+                }
+            });
+        }
+        else
+        {
+            mMap.setOnMyLocationChangeListener(null);
+        }
     }
 }

@@ -11,4 +11,15 @@
     <string name="team">Team</string>
     //map menu
     <string name="map_settings">Settings</string>
+    <string name="tracking">Tracking</string>
+    <string name="on">ON</string>
+    <string name="off">OFF</string>
+    <string name="satellite">Satellite</string>
+    <string name="save">save</string>
+    <string name="cancel">Cancel</string>
+
+    <string-array name="spinner_item_map_menu">
+        <item>Free ride</item>
+        <item>directed ride</item>
+    </string-array>
 </resources>
