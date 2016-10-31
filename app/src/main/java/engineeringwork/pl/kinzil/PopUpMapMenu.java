@@ -31,6 +31,12 @@ public class PopUpMapMenu {
     private boolean isSatellite;
     private int idRaidType;
 
+    private PopupWindow popupWindow;
+
+    public PopupWindow getPopUpWindow() {
+        return popupWindow;
+    }
+
     public boolean getIsTracking() {
         return isTracking;
     }
@@ -60,7 +66,7 @@ public class PopUpMapMenu {
     public void show()
     {
         View popupView = activity.getLayoutInflater().inflate(R.layout.map_popup, null);
-        PopupWindow popupWindow = new PopupWindow(popupView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        popupWindow = new PopupWindow(popupView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
 
         trackingSwitch = (Switch) popupView.findViewById(R.id.tracking_switch_popup);
@@ -69,7 +75,8 @@ public class PopUpMapMenu {
         saveButton = (Button) popupView.findViewById(R.id.save_button_popup);
         cancelButton = (Button) popupView.findViewById(R.id.cancel_button_popup);
 
-        setData(popupWindow);
+        setData();
+        setButton(popupWindow);
 
         popupWindow.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
         popupWindow.showAtLocation(popupView, Gravity.CENTER, 0, 0);
@@ -82,15 +89,25 @@ public class PopUpMapMenu {
         wm.updateViewLayout(container, p);
     }
 
-    private void setData(final PopupWindow popupWindow)
+    private void setData()
     {
         trackingSwitch.setChecked(isTracking);
         satelliteSwitch.setChecked(isSatellite);
         raidTypeSpinner.setSelection(idRaidType);
+    }
 
+    private void updateData()
+    {
+        isTracking = trackingSwitch.isChecked();
+        isSatellite = satelliteSwitch.isChecked();
+        idRaidType = raidTypeSpinner.getSelectedItemPosition();
+    }
+
+    private void setButton(final PopupWindow popupWindow) {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                updateData();
                 popupWindow.dismiss();
                 //TO DO - AFTER DATABASE
             }
@@ -102,5 +119,4 @@ public class PopUpMapMenu {
             }
         });
     }
-
 }

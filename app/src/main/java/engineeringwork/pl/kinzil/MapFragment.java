@@ -71,7 +71,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         int id = item.getItemId();
         if(id == R.id.map_settings){
             popUpMapMenu.show();
-
+            popUpMapMenu.getPopUpWindow().setOnDismissListener(new PopupWindow.OnDismissListener() {
+                @Override
+                public void onDismiss() {
+                    setMap();
+                }
+            });
         }
         return super.onOptionsItemSelected(item);
     }
@@ -102,6 +107,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private void setMap()
     {
         tracking(popUpMapMenu.getIsTracking());
+        satellite(popUpMapMenu.getIsSatellite());
     }
 
     private void tracking(boolean isTracking)
@@ -119,6 +125,18 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         else
         {
             mMap.setOnMyLocationChangeListener(null);
+        }
+    }
+
+    private void satellite(boolean isSatellite)
+    {
+        if(isSatellite)
+        {
+            mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+        }
+        else
+        {
+            mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         }
     }
 }
