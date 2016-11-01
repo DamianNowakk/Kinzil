@@ -1,6 +1,8 @@
 package engineeringwork.pl.kinzil;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -56,7 +58,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String CREATE_TABLE = "CREATE TABLE " + TABLE_USER + "("
-                + USER_COL_0 + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + USER_COL_0 + " TEXT PRIMARY KEY,"
                 + USER_COL_1 + " TEXT" + ")";
         db.execSQL(CREATE_TABLE);
 
@@ -97,6 +99,36 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_SETTINGS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_MAPSETTINGS);
         onCreate(db);
+    }
+
+    public boolean userInsert(User user)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(USER_COL_0, user.getLogin());
+        contentValues.put(USER_COL_1, user.getPassword());
+        long result = db.insert(TABLE_USER, null, contentValues);
+        return result != -1;
+    }
+
+    public User getUser(User user)
+    {
+        String login;
+        String password;
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "select * from " + TABLE_USER  + " where " + USER_COL_0 +" = '" + user.getLogin() + "'";
+        Cursor cursor = db.rawQuery(query, null);
+        if(cursor.getCount() == 0)
+            return null;
+        try{
+            cursor.moveToNext();
+            login = cursor.getString(0);
+            password = cursor.getString(1);
+        } finally {
+            cursor.close();
+        }
+
+        return new User(login, password);
     }
 
 

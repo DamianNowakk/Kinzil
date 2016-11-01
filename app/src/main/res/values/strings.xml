@@ -17,6 +17,13 @@
     <string name="satellite">Satellite</string>
     <string name="save">save</string>
     <string name="cancel">Cancel</string>
+    <string name="logout">Logout</string>
+    <string name="remember_me">Remember me</string>
+    <string name="register">Register</string>
+    <string name="login">Login</string>
+    <string name="password">Password</string>
+    <string name="username">Username</string>
+    <string name="loginBig">LOGIN</string>
 
     <string-array name="spinner_item_map_menu">
         <item>Free ride</item>

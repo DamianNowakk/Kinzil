@@ -1,6 +1,7 @@
 package engineeringwork.pl.kinzil;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -64,57 +65,6 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
-        actualLoged();
-
-    }
-
-    @Override
-    protected void onPause()
-    {
-        super.onPause();
-        saveActualLoged();
-    }
-
-    private void actualLoged()
-    {
-        SharedPreferences shared = getSharedPreferences("info",MODE_PRIVATE);
-        String string_temp = shared.getString("key5","None");
-
-
-    }
-
-    private void userPopUpWindow()
-    {
-        View popupView = getLayoutInflater().inflate(R.layout.user_popup, null);
-        final PopupWindow popupWindow = new PopupWindow(popupView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        Button saveButton = (Button) popupView.findViewById(R.id.save_button_popup);
-//        saveButton.setOnClickListener(
-//                new View.OnClickListener(){
-//                    @Override
-//                    public void onClick(View v)
-//                    {
-//                        popupWindow.dismiss();
-//                    }
-//                }
-//        );
-        popupWindow.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
-        popupWindow.showAtLocation(popupView, Gravity.CENTER, 0, 0);
-        //set transparent background
-        View container = (View) popupWindow.getContentView().getParent();
-        WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
-        WindowManager.LayoutParams p = (WindowManager.LayoutParams) container.getLayoutParams();
-        p.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-        p.dimAmount = 0.8f;
-        wm.updateViewLayout(container, p);
-    }
-
-    private void saveActualLoged()
-    {
-        SharedPreferences pref = getSharedPreferences("info", MODE_PRIVATE);
-        SharedPreferences.Editor editor = pref.edit();
-        editor.putString("key5","0");
-        editor.commit();
     }
 
     @Override
@@ -152,8 +102,14 @@ public class MainActivity extends AppCompatActivity
             fragmentManager.beginTransaction().replace(R.id.fragment_layout, new HistoryFragment()).commit();
         } else if (id == R.id.nav_aboutus) {
 
+        } else if (id == R.id.nav_logout) {
+            SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
+            SharedPreferences.Editor editor = pref.edit();
+            editor.putString("autorun","false");
+            editor.apply();
+            Intent intent = new Intent(this, UserAddActivity.class);
+            startActivity(intent);
         }
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
