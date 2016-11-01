@@ -1,5 +1,9 @@
 package engineeringwork.pl.kinzil;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -8,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.Gravity;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -17,7 +22,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.PopupWindow;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -27,6 +36,8 @@ public class MainActivity extends AppCompatActivity
     private String[] tabs = {"Counter", "Map"};
     private TabLayout tabLayout;
     private FrameLayout frameLayout;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +64,57 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        actualLoged();
+
+    }
+
+    @Override
+    protected void onPause()
+    {
+        super.onPause();
+        saveActualLoged();
+    }
+
+    private void actualLoged()
+    {
+        SharedPreferences shared = getSharedPreferences("info",MODE_PRIVATE);
+        String string_temp = shared.getString("key5","None");
+
+
+    }
+
+    private void userPopUpWindow()
+    {
+        View popupView = getLayoutInflater().inflate(R.layout.user_popup, null);
+        final PopupWindow popupWindow = new PopupWindow(popupView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        Button saveButton = (Button) popupView.findViewById(R.id.save_button_popup);
+//        saveButton.setOnClickListener(
+//                new View.OnClickListener(){
+//                    @Override
+//                    public void onClick(View v)
+//                    {
+//                        popupWindow.dismiss();
+//                    }
+//                }
+//        );
+        popupWindow.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
+        popupWindow.showAtLocation(popupView, Gravity.CENTER, 0, 0);
+        //set transparent background
+        View container = (View) popupWindow.getContentView().getParent();
+        WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
+        WindowManager.LayoutParams p = (WindowManager.LayoutParams) container.getLayoutParams();
+        p.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+        p.dimAmount = 0.8f;
+        wm.updateViewLayout(container, p);
+    }
+
+    private void saveActualLoged()
+    {
+        SharedPreferences pref = getSharedPreferences("info", MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putString("key5","0");
+        editor.commit();
     }
 
     @Override
