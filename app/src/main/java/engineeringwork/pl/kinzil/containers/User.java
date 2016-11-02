@@ -1,4 +1,4 @@
-package engineeringwork.pl.kinzil;
+package engineeringwork.pl.kinzil.containers;
 
 public class User {
 

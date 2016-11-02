@@ -1,8 +1,6 @@
-package engineeringwork.pl.kinzil;
+package engineeringwork.pl.kinzil.map;
 
-import android.content.Context;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,9 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
-import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -27,10 +23,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MenuInflater;
 import android.widget.PopupWindow;
-import android.view.ViewGroup.LayoutParams;
-import android.graphics.drawable.ColorDrawable;
-import android.view.WindowManager;
-import android.widget.Switch;
+
+import engineeringwork.pl.kinzil.R;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback {
     View view;
@@ -106,8 +100,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     private void setMap()
     {
-        tracking(popUpMapMenu.getIsTracking());
-        satellite(popUpMapMenu.getIsSatellite());
+        tracking(popUpMapMenu.getMapSetting().isTracking());
+        satellite(popUpMapMenu.getMapSetting().isSatellite());
     }
 
     private void tracking(boolean isTracking)
