@@ -1,4 +1,4 @@
-package engineeringwork.pl.kinzil;
+package engineeringwork.pl.kinzil.containers;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -14,18 +14,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
 
     private static final String TABLE_USER = "User";
-    private static final String USER_COL_0 = "ID";
-    private static final String USER_COL_1 = "LOGIN";
+    private static final String USER_COL_0 = "LOGIN";
+    private static final String USER_COL_1 = "PASSWORD";
 
     private static final String TABLE_TRIP = "Trip";
     private static final String TRIP_COL_0 = "ID";
     private static final String TRIP_COL_1 = "LOGIN";
     private static final String TRIP_COL_2 = "MAXSPEED";
     private static final String TRIP_COL_3 = "AVGSPEED";
-    private static final String TRIP_COL_4 = "TIME";
-    private static final String TRIP_COL_5 = "DISTANCE";
-    private static final String TRIP_COL_6 = "CALORIES";
-    private static final String TRIP_COL_7 = "MAP";
+    private static final String TRIP_COL_4 = "DISTANCE";
+    private static final String TRIP_COL_5 = "CALORIES";
+    private static final String TRIP_COL_6 = "TIME";
+    private static final String TRIP_COL_7 = "DATE";
+    private static final String TRIP_COL_8 = "MAP";
 
     private static final String TABLE_SETTINGS = "Settings";
     private static final String SETTINGS_COL_0 = "ID";
@@ -67,10 +68,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + TRIP_COL_1 + " TEXT,"
                 + TRIP_COL_2 + " REAL,"
                 + TRIP_COL_3 + " REAL,"
-                + TRIP_COL_4 + " TEXT,"
-                + TRIP_COL_5 + " REAL,"
-                + TRIP_COL_6 + " INTEGER,"
-                + TRIP_COL_7 + " TEXT" + ")";
+                + TRIP_COL_4 + " REAL,"
+                + TRIP_COL_5 + " INTEGER,"
+                + TRIP_COL_6 + " TEXT,"
+                + TRIP_COL_7 + " TEXT,"
+                + TRIP_COL_8 + " TEXT" + ")";
         db.execSQL(CREATE_TABLE);
 
         CREATE_TABLE = "CREATE TABLE " + TABLE_SETTINGS + "("

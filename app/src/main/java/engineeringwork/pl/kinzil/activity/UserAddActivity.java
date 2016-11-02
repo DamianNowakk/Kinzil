@@ -1,22 +1,20 @@
-package engineeringwork.pl.kinzil;
+package engineeringwork.pl.kinzil.activity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.IBinder;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.BoringLayout;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
+
+import engineeringwork.pl.kinzil.R;
+import engineeringwork.pl.kinzil.containers.DatabaseHelper;
+import engineeringwork.pl.kinzil.containers.User;
 
 public class UserAddActivity extends AppCompatActivity {
 

@@ -1,4 +1,4 @@
-package engineeringwork.pl.kinzil;
+package engineeringwork.pl.kinzil.counter;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -7,12 +7,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class BluetoothFragment extends Fragment {
+import engineeringwork.pl.kinzil.R;
+
+public class CounterFragment extends Fragment {
     View view;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.bluetooth_fragment, container, false);
+        view = inflater.inflate(R.layout.counter_fragment, container, false);
         return view;
     }
 }

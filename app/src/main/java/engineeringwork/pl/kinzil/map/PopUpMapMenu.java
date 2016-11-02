@@ -1,4 +1,4 @@
-package engineeringwork.pl.kinzil;
+package engineeringwork.pl.kinzil.map;
 
 
 import android.app.Activity;
@@ -16,6 +16,10 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.ArrayAdapter;
 
+import engineeringwork.pl.kinzil.R;
+import engineeringwork.pl.kinzil.activity.MainActivity;
+import engineeringwork.pl.kinzil.containers.MapSetting;
+
 public class PopUpMapMenu {
 
     private Activity activity;
@@ -27,9 +31,13 @@ public class PopUpMapMenu {
     private Button cancelButton;
 
 
-    private boolean isTracking;
-    private boolean isSatellite;
-    private int idRaidType;
+
+
+    private MapSetting mapSetting;
+
+    public MapSetting getMapSetting() {
+        return mapSetting;
+    }
 
     private PopupWindow popupWindow;
 
@@ -37,29 +45,19 @@ public class PopUpMapMenu {
         return popupWindow;
     }
 
-    public boolean getIsTracking() {
-        return isTracking;
-    }
-
-    public boolean getIsSatellite() {
-        return isSatellite;
-    }
-
-    public int getIdRaidType() {
-        return idRaidType;
-    }
-
     public PopUpMapMenu(Activity activity)
     {
         this.activity = activity;
-        updatedata();
+        update();
+
     }
 
-    private void updatedata()
+
+
+    private void update()
     {
-        isTracking = false;
-        isSatellite = false;
-        idRaidType = 0;
+        mapSetting = new MapSetting(((MainActivity)activity).getLogin(), false, false, 16, 0);
+
         //TO DO - AFTER DATABASE
     }
 
@@ -91,16 +89,16 @@ public class PopUpMapMenu {
 
     private void setData()
     {
-        trackingSwitch.setChecked(isTracking);
-        satelliteSwitch.setChecked(isSatellite);
-        raidTypeSpinner.setSelection(idRaidType);
+        trackingSwitch.setChecked(mapSetting.isTracking());
+        satelliteSwitch.setChecked(mapSetting.isSatellite());
+        raidTypeSpinner.setSelection(mapSetting.getType());
     }
 
     private void updateData()
     {
-        isTracking = trackingSwitch.isChecked();
-        isSatellite = satelliteSwitch.isChecked();
-        idRaidType = raidTypeSpinner.getSelectedItemPosition();
+        mapSetting.setTracking(trackingSwitch.isChecked());
+        mapSetting.setSatellite(satelliteSwitch.isChecked());
+        mapSetting.setType(raidTypeSpinner.getSelectedItemPosition());
     }
 
     private void setButton(final PopupWindow popupWindow) {
