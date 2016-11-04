@@ -24,9 +24,11 @@
     <string name="password">Password</string>
     <string name="username">Username</string>
     <string name="loginBig">LOGIN</string>
+    <string name="zoom">Zoom:</string>
 
     <string-array name="spinner_item_map_menu">
-        <item>Free ride</item>
+        <item>Free ride(without drawing</item>
+        <item>Free ride(with drawing)</item>
         <item>directed ride</item>
     </string-array>
 </resources>

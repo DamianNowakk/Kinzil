@@ -89,11 +89,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             }
         }
 
-        mMap.getUiSettings().setCompassEnabled(false);
+        mMap.getUiSettings().setCompassEnabled(true);
         mMap.getUiSettings().setIndoorLevelPickerEnabled(false);
         mMap.getUiSettings().setMapToolbarEnabled(false);
         mMap.getUiSettings().setRotateGesturesEnabled(false);
-        mMap.getUiSettings().setZoomControlsEnabled(true);
         setMap();
 
     }
@@ -108,16 +107,18 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     {
         if(isTracking)
         {
+            mMap.getUiSettings().setZoomControlsEnabled(false);
             mMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
                 @Override
                 public void onMyLocationChange(Location location) {
-                    CameraUpdate cu = CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 16);
+                    CameraUpdate cu = CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), popUpMapMenu.getMapSetting().getZoom());
                     mMap.animateCamera(cu);
                 }
             });
         }
         else
         {
+            mMap.getUiSettings().setZoomControlsEnabled(true);
             mMap.setOnMyLocationChangeListener(null);
         }
     }

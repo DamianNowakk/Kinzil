@@ -133,5 +133,91 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return new User(login, password);
     }
 
+    public boolean mapSettingInsert(MapSetting mapSetting)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(MAPSETTINGS_COL_1, mapSetting.getLogin() );
+        contentValues.put(MAPSETTINGS_COL_2, mapSetting.isTracking());
+        contentValues.put(MAPSETTINGS_COL_3, mapSetting.isSatellite());
+        contentValues.put(MAPSETTINGS_COL_4, mapSetting.getZoom());
+        contentValues.put(MAPSETTINGS_COL_5, mapSetting.getType());
+        long result = db.insert(TABLE_MAPSETTINGS, null, contentValues);
+        return result != -1;
+    }
+
+    public boolean mapSettingUpdate(MapSetting mapSetting)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(MAPSETTINGS_COL_0, mapSetting.getId() );
+        contentValues.put(MAPSETTINGS_COL_1, mapSetting.getLogin() );
+        contentValues.put(MAPSETTINGS_COL_2, mapSetting.isTracking());
+        contentValues.put(MAPSETTINGS_COL_3, mapSetting.isSatellite());
+        contentValues.put(MAPSETTINGS_COL_4, mapSetting.getZoom());
+        contentValues.put(MAPSETTINGS_COL_5, mapSetting.getType());
+        long result = db.update(TABLE_MAPSETTINGS, contentValues, "ID = ?", new String[] { Integer.toString(mapSetting.getId()) } );
+        return result != -1;
+    }
+
+    public MapSetting getMapSettings(int id)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        MapSetting mapSetting = new MapSetting();
+        String query = "select * from " + TABLE_MAPSETTINGS  + " where " + MAPSETTINGS_COL_0 +" = '" + id + "'";
+        Cursor cursor = db.rawQuery(query, null);
+        if(cursor.getCount() == 0)
+            return null;
+        try{
+            cursor.moveToNext();
+            mapSetting.setId(cursor.getInt(0));
+            mapSetting.setLogin(cursor.getString(1));
+            if(cursor.getString(2).equals("1"))
+                mapSetting.setTracking(true);
+            else
+                mapSetting.setTracking(false);
+            String a = cursor.getString(3);
+            if(a.equals("1"))
+                mapSetting.setSatellite(true);
+            else
+                mapSetting.setSatellite(false);
+            mapSetting.setZoom(cursor.getInt(4));
+            mapSetting.setType(cursor.getInt(5));
+        } finally {
+            cursor.close();
+        }
+        return mapSetting;
+    }
+
+    public MapSetting getFirstLoginMapSettings(String login)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        MapSetting mapSetting = new MapSetting();
+        String query = "select * from " + TABLE_MAPSETTINGS  + " where " + MAPSETTINGS_COL_1 +" = '" + login + "'";
+        Cursor cursor = db.rawQuery(query, null);
+        if(cursor.getCount() == 0)
+            return null;
+        try{
+            cursor.moveToNext();
+            mapSetting.setId(cursor.getInt(0));
+            mapSetting.setLogin(cursor.getString(1));
+            if(cursor.getString(2).equals("1"))
+                mapSetting.setTracking(true);
+            else
+                mapSetting.setTracking(false);
+            String a = cursor.getString(3);
+            if(a.equals("1"))
+                mapSetting.setSatellite(true);
+            else
+                mapSetting.setSatellite(false);
+            mapSetting.setZoom(cursor.getInt(4));
+            mapSetting.setType(cursor.getInt(5));
+        } finally {
+            cursor.close();
+        }
+        return mapSetting;
+    }
+
+
 
 }

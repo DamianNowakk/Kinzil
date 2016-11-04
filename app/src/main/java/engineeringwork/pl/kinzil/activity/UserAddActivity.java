@@ -91,10 +91,10 @@ public class UserAddActivity extends AppCompatActivity {
         }
         User user = new User(loginEditText.getText().toString(), passwordEditText.getText().toString());
         boolean isInserted = db.userInsert(user);
-        if(!isInserted)
-            Toast.makeText(UserAddActivity.this, "User exist",Toast.LENGTH_LONG).show();
-        else
+        if(isInserted)
             Toast.makeText(UserAddActivity.this, "Added user",Toast.LENGTH_LONG).show();
+        else
+            Toast.makeText(UserAddActivity.this, "User exist",Toast.LENGTH_LONG).show();
     }
 
     private void checkdata()
