@@ -110,7 +110,9 @@ public class MainActivity extends AppCompatActivity
             editor.putString("autorun","false");
             editor.apply();
             Intent intent = new Intent(this, UserAddActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
             startActivity(intent);
+            finish();
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

@@ -1,10 +1,12 @@
 package engineeringwork.pl.kinzil.activity;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -46,7 +48,7 @@ public class UserAddActivity extends AppCompatActivity {
         passwordEditText = (EditText) findViewById(R.id.PasswordText);
 
         onClickLogin();
-        onClickCreate();
+        onClickRegister();
     }
 
     public void onClickLogin()
@@ -64,7 +66,7 @@ public class UserAddActivity extends AppCompatActivity {
         );
     }
 
-    public void onClickCreate()
+    public void onClickRegister()
     {
         createButton.setOnClickListener(
                 new View.OnClickListener()
@@ -73,28 +75,58 @@ public class UserAddActivity extends AppCompatActivity {
                     public void onClick(View v)
                     {
                         hideKeyboard();
-                        createUser();
+                        showDialogRegister();
                     }
                 }
         );
     }
 
-    private void createUser()
+    private void showDialogRegister()
     {
-        if(loginEditText.getText().toString().equals("")){
-            Toast.makeText(UserAddActivity.this, "Set login",Toast.LENGTH_LONG).show();
-            return;
-        }
-        if(passwordEditText.getText().toString().equals("")){
-            Toast.makeText(UserAddActivity.this, "Set password",Toast.LENGTH_LONG).show();
-            return;
-        }
-        User user = new User(loginEditText.getText().toString(), passwordEditText.getText().toString());
-        boolean isInserted = db.userInsert(user);
-        if(isInserted)
-            Toast.makeText(UserAddActivity.this, "Added user",Toast.LENGTH_LONG).show();
-        else
-            Toast.makeText(UserAddActivity.this, "User exist",Toast.LENGTH_LONG).show();
+        final Dialog login = new Dialog(this, R.style.AlertDialogCustom);
+        login.setContentView(R.layout.dialog_register);
+        login.setTitle("Register");
+        Button btnLogin = (Button) login.findViewById(R.id.btn_create);
+        Button btnCancel = (Button) login.findViewById(R.id.btn_cancel);
+        final EditText txtUsername = (EditText)login.findViewById(R.id.txt_name);
+        final EditText txtPassword = (EditText)login.findViewById(R.id.txt_password);
+        final EditText txtPasswordRepeat = (EditText)login.findViewById(R.id.txt_passwordRepeat);
+        btnLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(txtUsername.getText().toString().equals("")){
+                    Toast.makeText(UserAddActivity.this, "Set login",Toast.LENGTH_LONG).show();
+                    return;
+                }
+                if(txtPassword.getText().toString().equals("")){
+                    Toast.makeText(UserAddActivity.this, "Set password",Toast.LENGTH_LONG).show();
+                    return;
+                }
+                if(txtPasswordRepeat.getText().toString().equals("")){
+                    Toast.makeText(UserAddActivity.this, "Repeat password",Toast.LENGTH_LONG).show();
+                    return;
+                }
+                if(!txtPasswordRepeat.getText().toString().equals(txtPassword.getText().toString())){
+                    Toast.makeText(UserAddActivity.this, "The repeat password is incorrect",Toast.LENGTH_LONG).show();
+                    return;
+                }
+                User user = new User(txtUsername.getText().toString(), txtPassword.getText().toString());
+                boolean isInserted = db.userInsert(user);
+                if(isInserted) {
+                    Toast.makeText(UserAddActivity.this, "Added user", Toast.LENGTH_LONG).show();
+                    login.dismiss();
+                }
+                else
+                    Toast.makeText(UserAddActivity.this, "User exist",Toast.LENGTH_LONG).show();
+            }
+        });
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                login.dismiss();
+            }
+        });
+        login.show();
     }
 
     private void checkdata()
@@ -131,6 +163,7 @@ public class UserAddActivity extends AppCompatActivity {
 
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+        finish();
 
     }
 
