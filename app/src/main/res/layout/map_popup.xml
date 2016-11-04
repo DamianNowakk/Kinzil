@@ -25,6 +25,42 @@
         android:textOn="@string/on"
         android:textOff="@string/off" />
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_weight="0.03"
+        android:gravity="start|center">
+
+        <TextView
+            android:text="@string/zoom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView2"
+            android:textAppearance="@style/TextAppearance.AppCompat"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_width="20dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/zoomTextView"
+            android:gravity="end"
+            android:layout_alignParentTop="true"
+            android:layout_toEndOf="@+id/textView2"
+            android:textAppearance="@style/TextAppearance.AppCompat" />
+
+        <SeekBar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/zoomTextView"
+            android:id="@+id/zoomSeekbar"
+            android:max="20" />
+
+    </RelativeLayout>
+
     <Switch
         android:text="@string/satellite"
         android:layout_width="match_parent"

@@ -76,4 +76,7 @@ public class MapSetting {
     public MapSetting(String login) {
         this.login = login;
     }
+
+    public MapSetting() {
+    }
 }
