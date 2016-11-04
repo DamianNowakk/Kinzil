@@ -25,6 +25,9 @@
     <string name="username">Username</string>
     <string name="loginBig">LOGIN</string>
     <string name="zoom">Zoom:</string>
+    <string name="cancel_dialog_register">Cancel</string>
+    <string name="create_dialog_register">Create</string>
+    <string name="repeat_password">Repeat Password</string>
 
     <string-array name="spinner_item_map_menu">
         <item>Free ride(without drawing</item>
