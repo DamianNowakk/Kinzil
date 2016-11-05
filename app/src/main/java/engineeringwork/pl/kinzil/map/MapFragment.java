@@ -16,6 +16,8 @@ import android.widget.Button;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
@@ -27,9 +29,8 @@ import android.widget.PopupWindow;
 import engineeringwork.pl.kinzil.R;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback {
-    View view;
+    MapView mapView;
     private GoogleMap mMap;
-    private Button button;
     private PopUpMapMenu popUpMapMenu;
 
     @Override
@@ -41,18 +42,28 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.map_fragment, container, false);
+        View  rootView = inflater.inflate(R.layout.map_fragment, container, false);
 
-        FragmentManager manager = getFragmentManager();
-        FragmentTransaction transaction = manager.beginTransaction();
-        SupportMapFragment fragment = new SupportMapFragment();
-        transaction.replace(R.id.mapView, fragment);
-        transaction.commit();
-        fragment.getMapAsync(this);
+        mapView = (MapView) rootView.findViewById(R.id.mapView);
+        mapView.onCreate(savedInstanceState);
+        mapView.onResume();
+
+        try {
+            MapsInitializer.initialize(getActivity().getApplicationContext());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+//        FragmentManager manager = getFragmentManager();
+//        FragmentTransaction transaction = manager.beginTransaction();
+//        SupportMapFragment fragment = new SupportMapFragment();
+//        transaction.replace(R.id.mapView, fragment);
+//        transaction.commit();
+        mapView.getMapAsync(this);
 
         popUpMapMenu = new PopUpMapMenu(getActivity());
 
-        return view;
+        return rootView;
     }
 
     @Override
@@ -133,5 +144,28 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         {
             mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         }
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        mapView.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mapView.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mapView.onDestroy();
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        mapView.onLowMemory();
     }
 }
