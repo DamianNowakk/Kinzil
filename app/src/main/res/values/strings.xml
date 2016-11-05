@@ -30,6 +30,10 @@
     <string name="password">Password</string>
     <string name="username">Username</string>
     <string name="loginBig">LOGIN</string>
+    //bluetooth informations
+    <string name="low_energy_bluetooth_is_not_supported">Low energy bluetooth is not supported</string>
+    <string name="bluetooth_is_not_supported">bluetooth is not supported</string>
+
 
     <string-array name="spinner_item_map_menu">
         <item>Free ride</item>

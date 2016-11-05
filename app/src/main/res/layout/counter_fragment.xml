@@ -278,8 +278,19 @@
                 android:textAllCaps="false"
                 android:layout_marginBottom="126dp"
                 android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true" />
+                android:layout_centerHorizontal="true"
+                android:textAlignment="center" />
         </TableRow>
     </TableLayout>
+
+    <TextView
+        android:text="Dane z licznika"
+        android:layout_width="match_parent"
+        android:id="@+id/textView2"
+        android:textAlignment="center"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:textSize="20sp"
+        android:layout_height="120dp" />
 
 </RelativeLayout>
