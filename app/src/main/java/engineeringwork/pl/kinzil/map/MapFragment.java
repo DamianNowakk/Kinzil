@@ -1,6 +1,7 @@
 package engineeringwork.pl.kinzil.map;
 
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -19,19 +20,24 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
+
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MenuInflater;
 import android.widget.PopupWindow;
+
+import java.util.ArrayList;
 
 import engineeringwork.pl.kinzil.R;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback {
     View view;
     private GoogleMap mMap;
-    private Button button;
     private PopUpMapMenu popUpMapMenu;
-
+    private ArrayList<Location> locationArrayList= new ArrayList<>();
+    private Polyline polylineFinal;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,28 +105,68 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     private void setMap()
     {
-        tracking(popUpMapMenu.getMapSetting().isTracking());
+        tracking();
         satellite(popUpMapMenu.getMapSetting().isSatellite());
     }
 
-    private void tracking(boolean isTracking)
+    private void tracking()
     {
-        if(isTracking)
-        {
+        if(popUpMapMenu.getMapSetting().isTracking())
             mMap.getUiSettings().setZoomControlsEnabled(false);
-            mMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
-                @Override
-                public void onMyLocationChange(Location location) {
+        else
+            mMap.getUiSettings().setZoomControlsEnabled(true);
+        mMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
+            @Override
+            public void onMyLocationChange(Location location) {
+                if(popUpMapMenu.getMapSetting().isTracking()) {
                     CameraUpdate cu = CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), popUpMapMenu.getMapSetting().getZoom());
                     mMap.animateCamera(cu);
                 }
-            });
-        }
-        else
+
+                if(locationArrayList.size() == 0) {
+                    locationArrayList.add(location);
+                }
+                else {
+                    if(checkLocation(locationArrayList.get(locationArrayList.size() - 1), location)) {
+                        locationArrayList.add(location);
+                        if(polylineFinal != null) polylineFinal.remove();
+                        drawPrimaryLinePath(locationArrayList);
+                    }
+                }
+            }
+        });
+    }
+    private boolean checkLocation(Location a, Location b)
+    {
+        float result = a.distanceTo(b);
+        return result > 5;
+    }
+    private void drawPrimaryLinePath( ArrayList<Location> listLocsToDraw )
+    {
+        if ( mMap == null )
         {
-            mMap.getUiSettings().setZoomControlsEnabled(true);
-            mMap.setOnMyLocationChangeListener(null);
+            return;
         }
+
+        if ( listLocsToDraw.size() < 2 )
+        {
+            return;
+        }
+
+        PolylineOptions options = new PolylineOptions();
+
+        options.color( Color.parseColor( "#CC0000FF" ) );
+        options.width( 5 );
+        options.visible( true );
+
+        for ( Location locRecorded : listLocsToDraw )
+        {
+            options.add( new LatLng( locRecorded.getLatitude(),
+                    locRecorded.getLongitude() ) );
+        }
+
+        polylineFinal = mMap.addPolyline( options );
+
     }
 
     private void satellite(boolean isSatellite)
