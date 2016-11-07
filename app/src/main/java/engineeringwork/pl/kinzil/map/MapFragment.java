@@ -155,20 +155,22 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         showSecondaryRoute(popUpMapMenu.getMapSetting().isShowSecondaryRoute());
     }
 
-    private void  showSecondaryRoute(Boolean isShow)
-    {
-        if(isShow)
-            drawSecondaryLinePath();
-        else if(polylineFinalSecondary != null)
-            polylineFinalSecondary.remove();
-    }
-
     private void  showRoute(Boolean isShow)
     {
-        if(isShow)
+        if(isShow) {
             drawPrimaryLinePath();
+        }
         else if(polylineFinalMain != null)
             polylineFinalMain.remove();
+    }
+
+    private void  showSecondaryRoute(Boolean isShow)
+    {
+        if(isShow) {
+            drawSecondaryLinePath();
+        }
+        else if(polylineFinalSecondary != null)
+            polylineFinalSecondary.remove();
     }
 
     private void tracking()
@@ -191,9 +193,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 else {
                     if(checkLocation(locationArrayListMain.get(locationArrayListMain.size() - 1), location)) {
                         locationArrayListMain.add(location);
-                        if(polylineFinalMain != null) polylineFinalMain.remove();
-                        if(popUpMapMenu.getMapSetting().isShowRoute())
+                        if(popUpMapMenu.getMapSetting().isShowRoute()) {
                             drawPrimaryLinePath();
+                        }
                     }
                 }
             }
@@ -212,6 +214,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             return;
         if ( locationArrayListMain.size() < 2 )
             return;
+        if(polylineFinalMain != null)
+            polylineFinalMain.remove();
         PolylineOptions options = new PolylineOptions();
         options.color( Color.parseColor( "#CC0000FF" ) );
         options.width( 5 );
@@ -232,6 +236,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             return;
         if ( locationArrayListSecondary.size() < 2 )
             return;
+        if(polylineFinalSecondary != null)
+            polylineFinalSecondary.remove();
         PolylineOptions options = new PolylineOptions();
         options.color( Color.parseColor( "#999999" ) );
         options.width( 5 );
