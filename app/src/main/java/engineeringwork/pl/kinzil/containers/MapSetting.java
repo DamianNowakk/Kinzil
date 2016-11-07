@@ -6,7 +6,8 @@ public class MapSetting {
     private boolean isTracking; //mm
     private boolean isSatellite;
     private int zoom;
-    private int type;
+    private boolean showRoute;
+    private boolean showSecondaryRoute;
 
     public int getId() {
         return id;
@@ -14,38 +15,6 @@ public class MapSetting {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public int getType() {
-        return type;
-    }
-
-    public void setType(int type) {
-        this.type = type;
-    }
-
-    public int getZoom() {
-        return zoom;
-    }
-
-    public void setZoom(int zoom) {
-        this.zoom = zoom;
-    }
-
-    public boolean isSatellite() {
-        return isSatellite;
-    }
-
-    public void setSatellite(boolean satellite) {
-        isSatellite = satellite;
-    }
-
-    public boolean isTracking() {
-        return isTracking;
-    }
-
-    public void setTracking(boolean tracking) {
-        isTracking = tracking;
     }
 
     public String getLogin() {
@@ -56,21 +25,64 @@ public class MapSetting {
         this.login = login;
     }
 
-    public MapSetting(int id, String login, boolean isTracking, boolean isSatellite, int zoom, int type) {
+    public boolean isTracking() {
+        return isTracking;
+    }
+
+    public void setTracking(boolean tracking) {
+        isTracking = tracking;
+    }
+
+    public boolean isSatellite() {
+        return isSatellite;
+    }
+
+    public void setSatellite(boolean satellite) {
+        isSatellite = satellite;
+    }
+
+    public int getZoom() {
+        return zoom;
+    }
+
+    public void setZoom(int zoom) {
+        this.zoom = zoom;
+    }
+
+    public boolean isShowRoute() {
+        return showRoute;
+    }
+
+    public void setShowRoute(boolean showRoute) {
+        this.showRoute = showRoute;
+    }
+
+    public boolean isShowSecondaryRoute() {
+        return showSecondaryRoute;
+    }
+
+    public void setShowSecondaryRoute(boolean showSecondaryRoute) {
+        this.showSecondaryRoute = showSecondaryRoute;
+    }
+
+
+    public MapSetting(int id, String login, boolean isTracking, boolean isSatellite, int zoom, boolean showRoute, boolean showSecondaryRoute) {
         this.id = id;
         this.login = login;
         this.isTracking = isTracking;
         this.isSatellite = isSatellite;
         this.zoom = zoom;
-        this.type = type;
+        this.showRoute = showRoute;
+        this.showSecondaryRoute = showSecondaryRoute;
     }
 
-    public MapSetting(String login, boolean isTracking, boolean isSatellite, int zoom, int type) {
+    public MapSetting(String login, boolean isTracking, boolean isSatellite, int zoom, boolean showRoute, boolean showSecondaryRoute) {
         this.login = login;
         this.isTracking = isTracking;
         this.isSatellite = isSatellite;
         this.zoom = zoom;
-        this.type = type;
+        this.showRoute = showRoute;
+        this.showSecondaryRoute = showSecondaryRoute;
     }
 
     public MapSetting(String login) {
