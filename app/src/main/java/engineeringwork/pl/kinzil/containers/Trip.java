@@ -103,4 +103,9 @@ public class Trip {
         this.login = login;
         this.date = date;
     }
+
+    public Trip()
+    {
+
+    }
 }

@@ -48,4 +48,6 @@ public class Setting {
     public Setting(String login) {
         this.login = login;
     }
+
+    public Setting() { }
 }

@@ -6,8 +6,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-public class DatabaseHelper extends SQLiteOpenHelper {
+import java.util.ArrayList;
 
+public class DatabaseHelper extends SQLiteOpenHelper {
 
 
     private static final String DATABASE_NAME = "Counter.db";
@@ -45,6 +46,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     //singleton
     private static DatabaseHelper sInstance;
+
     public static synchronized DatabaseHelper getInstance(Context context) {
         if (sInstance == null) {
             sInstance = new DatabaseHelper(context.getApplicationContext());
@@ -78,7 +80,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         CREATE_TABLE = "CREATE TABLE " + TABLE_SETTINGS + "("
                 + SETTINGS_COL_0 + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + SETTINGS_COL_1 + " TEXT,"
-                + SETTINGS_COL_2 + " REAL,"
+                + SETTINGS_COL_2 + " INTEGER,"
                 + SETTINGS_COL_3 + " INTEGER" + ")";
 
         db.execSQL(CREATE_TABLE);
@@ -103,8 +105,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public boolean userInsert(User user)
-    {
+    public boolean userInsert(User user) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(USER_COL_0, user.getLogin());
@@ -113,31 +114,28 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return result != -1;
     }
 
-    public User getUser(User user)
-    {
-        String login;
-        String password;
+    public User getUser(String login) {
+        User user = new User();
         SQLiteDatabase db = this.getWritableDatabase();
-        String query = "select * from " + TABLE_USER  + " where " + USER_COL_0 +" = '" + user.getLogin() + "'";
+        String query = "select * from " + TABLE_USER + " where " + USER_COL_0 + " = '" + login + "'";
         Cursor cursor = db.rawQuery(query, null);
-        if(cursor.getCount() == 0)
+        if (cursor.getCount() == 0)
             return null;
-        try{
+        try {
             cursor.moveToNext();
-            login = cursor.getString(0);
-            password = cursor.getString(1);
+            user.setLogin(cursor.getString(0)) ;
+            user.setPassword(cursor.getString(1));
         } finally {
             cursor.close();
         }
 
-        return new User(login, password);
+        return user;
     }
 
-    public boolean mapSettingInsert(MapSetting mapSetting)
-    {
+    public boolean mapSettingInsert(MapSetting mapSetting) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(MAPSETTINGS_COL_1, mapSetting.getLogin() );
+        contentValues.put(MAPSETTINGS_COL_1, mapSetting.getLogin());
         contentValues.put(MAPSETTINGS_COL_2, mapSetting.isTracking());
         contentValues.put(MAPSETTINGS_COL_3, mapSetting.isSatellite());
         contentValues.put(MAPSETTINGS_COL_4, mapSetting.getZoom());
@@ -146,38 +144,36 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return result != -1;
     }
 
-    public boolean mapSettingUpdate(MapSetting mapSetting)
-    {
+    public boolean mapSettingUpdate(MapSetting mapSetting) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(MAPSETTINGS_COL_0, mapSetting.getId() );
-        contentValues.put(MAPSETTINGS_COL_1, mapSetting.getLogin() );
+        contentValues.put(MAPSETTINGS_COL_0, mapSetting.getId());
+        contentValues.put(MAPSETTINGS_COL_1, mapSetting.getLogin());
         contentValues.put(MAPSETTINGS_COL_2, mapSetting.isTracking());
         contentValues.put(MAPSETTINGS_COL_3, mapSetting.isSatellite());
         contentValues.put(MAPSETTINGS_COL_4, mapSetting.getZoom());
         contentValues.put(MAPSETTINGS_COL_5, mapSetting.getType());
-        long result = db.update(TABLE_MAPSETTINGS, contentValues, "ID = ?", new String[] { Integer.toString(mapSetting.getId()) } );
+        long result = db.update(TABLE_MAPSETTINGS, contentValues, "ID = ?", new String[]{Integer.toString(mapSetting.getId())});
         return result != -1;
     }
 
-    public MapSetting getMapSettings(int id)
-    {
+    public MapSetting getMapSettings(int id) {
         SQLiteDatabase db = this.getWritableDatabase();
         MapSetting mapSetting = new MapSetting();
-        String query = "select * from " + TABLE_MAPSETTINGS  + " where " + MAPSETTINGS_COL_0 +" = '" + id + "'";
+        String query = "select * from " + TABLE_MAPSETTINGS + " where " + MAPSETTINGS_COL_0 + " = '" + id + "'";
         Cursor cursor = db.rawQuery(query, null);
-        if(cursor.getCount() == 0)
+        if (cursor.getCount() == 0)
             return null;
-        try{
+        try {
             cursor.moveToNext();
             mapSetting.setId(cursor.getInt(0));
             mapSetting.setLogin(cursor.getString(1));
-            if(cursor.getString(2).equals("1"))
+            if (cursor.getString(2).equals("1"))
                 mapSetting.setTracking(true);
             else
                 mapSetting.setTracking(false);
             String a = cursor.getString(3);
-            if(a.equals("1"))
+            if (a.equals("1"))
                 mapSetting.setSatellite(true);
             else
                 mapSetting.setSatellite(false);
@@ -189,24 +185,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return mapSetting;
     }
 
-    public MapSetting getFirstLoginMapSettings(String login)
-    {
+    public MapSetting getFirstLoginMapSettings(String login) {
         SQLiteDatabase db = this.getWritableDatabase();
         MapSetting mapSetting = new MapSetting();
-        String query = "select * from " + TABLE_MAPSETTINGS  + " where " + MAPSETTINGS_COL_1 +" = '" + login + "'";
+        String query = "select * from " + TABLE_MAPSETTINGS + " where " + MAPSETTINGS_COL_1 + " = '" + login + "'";
         Cursor cursor = db.rawQuery(query, null);
-        if(cursor.getCount() == 0)
+        if (cursor.getCount() == 0)
             return null;
-        try{
+        try {
             cursor.moveToNext();
             mapSetting.setId(cursor.getInt(0));
             mapSetting.setLogin(cursor.getString(1));
-            if(cursor.getString(2).equals("1"))
+            if (cursor.getString(2).equals("1"))
                 mapSetting.setTracking(true);
             else
                 mapSetting.setTracking(false);
             String a = cursor.getString(3);
-            if(a.equals("1"))
+            if (a.equals("1"))
                 mapSetting.setSatellite(true);
             else
                 mapSetting.setSatellite(false);
@@ -218,6 +213,91 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return mapSetting;
     }
 
+    public boolean settingInsert(Setting setting) // trzeba przetestowac
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(SETTINGS_COL_1, setting.getLogin());
+        contentValues.put(SETTINGS_COL_2, setting.getWheelSize());
+        contentValues.put(SETTINGS_COL_3, setting.getWeight());
+        long result = db.insert(TABLE_SETTINGS, null, contentValues);
+        return result != -1;
+    }
+
+    public boolean settingUpdate(Setting setting) // trzeba przetestowac
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(MAPSETTINGS_COL_0, setting.getId());
+        contentValues.put(MAPSETTINGS_COL_1, setting.getLogin());
+        contentValues.put(MAPSETTINGS_COL_2, setting.getWheelSize());
+        contentValues.put(MAPSETTINGS_COL_3, setting.getWeight());
+        long result = db.update(TABLE_MAPSETTINGS, contentValues, "ID = ?", new String[]{Integer.toString(setting.getId())});
+        return result != -1;
+    }
+
+    public Setting getFirstLoginSetting(String login) // trzeba przetestowac
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Setting setting = new Setting();
+        String query = "select * from " + TABLE_SETTINGS + " where " + SETTINGS_COL_1 + " = '" + login + "'";
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.getCount() == 0)
+            return null;
+        try {
+            cursor.moveToNext();
+            setting.setId(cursor.getInt(0));
+            setting.setLogin(cursor.getString(1));
+            setting.setWheelSize(cursor.getInt(2));
+            setting.setWeight(cursor.getInt(3));
+        } finally {
+            cursor.close();
+        }
+        return setting;
+    }
+
+    public boolean tripInsert(Trip trip) {  // trzeba przetestowac
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(TRIP_COL_1, trip.getLogin());
+        contentValues.put(TRIP_COL_2, trip.getMaxSpeed());
+        contentValues.put(TRIP_COL_3, trip.getDistance());
+        contentValues.put(TRIP_COL_4, trip.getAvgSpeed());
+        contentValues.put(TRIP_COL_5, trip.getCalories());
+        contentValues.put(TRIP_COL_6, trip.getTime());
+        contentValues.put(TRIP_COL_7, trip.getDate());
+        contentValues.put(TRIP_COL_8, trip.getMap());
+        long result = db.insert(TABLE_TRIP, null, contentValues);
+        return result != -1;
+    }
+
+    public ArrayList<Trip> getTrip(String login) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ArrayList<Trip> tripList = new ArrayList<>();
+        String query = "select * from " + TABLE_TRIP + " where " + TRIP_COL_1 + " = '" + login + "'";
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.getCount() == 0)
+            return null;
+        try {
+            for(int i=0; i < cursor.getCount(); i++) { // trzeba przetestowac
+                Trip trip = new Trip();
+                cursor.moveToNext();
+                trip.setId(cursor.getInt(0));
+                trip.setLogin(cursor.getString(1));
+                trip.setMaxSpeed(cursor.getFloat(2));
+                trip.setDistance(cursor.getFloat(3));
+                trip.setAvgSpeed(cursor.getFloat(4));
+                trip.setCalories(cursor.getInt(5));
+                trip.setTime(cursor.getString(6));
+                trip.setDate(cursor.getString(7));
+                trip.setMap(cursor.getString(8));
+                tripList.add(trip);
+            }
+        } finally {
+            cursor.close();
+        }
+        return tripList;
+    }
 
 
 }

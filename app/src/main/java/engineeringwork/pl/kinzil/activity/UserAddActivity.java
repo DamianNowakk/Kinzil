@@ -139,8 +139,7 @@ public class UserAddActivity extends AppCompatActivity {
             Toast.makeText(UserAddActivity.this, "Set password",Toast.LENGTH_LONG).show();
             return;
         }
-        User user = new User(loginEditText.getText().toString(), passwordEditText.getText().toString());
-        user = db.getUser(user);
+        User user = db.getUser(loginEditText.getText().toString());
         if(user == null) {
             Toast.makeText(UserAddActivity.this, "User not exist", Toast.LENGTH_LONG).show();
             return;
