@@ -28,6 +28,8 @@
     <string name="cancel_dialog_register">Cancel</string>
     <string name="create_dialog_register">Create</string>
     <string name="repeat_password">Repeat Password</string>
+    <string name="show_route">Show route</string>
+    <string name="show_secondary_route">Show secondary route</string>
 
     <string-array name="spinner_item_map_menu">
         <item>Free ride(without drawing</item>

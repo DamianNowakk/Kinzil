@@ -32,7 +32,9 @@ public class PopUpMapMenu {
 
     private Switch trackingSwitch;
     private Switch satelliteSwitch;
-    private Spinner raidTypeSpinner;
+    private Switch showRouteSwitch;
+    private Switch showSecondaryRouteSwitch;
+
     private Button saveButton;
     private Button cancelButton;
     private SeekBar zoomSeekBar;
@@ -66,9 +68,7 @@ public class PopUpMapMenu {
     {
         mapSetting = db.getFirstLoginMapSettings(((MainActivity)activity).getLogin());
         if(mapSetting == null)
-            mapSetting = new MapSetting(((MainActivity)activity).getLogin(), false, false, 16, 0);
-
-        //TO DO - AFTER DATABASE
+            mapSetting = new MapSetting(((MainActivity)activity).getLogin(), false, false, 16, true, true);
     }
 
     public void show()
@@ -78,7 +78,9 @@ public class PopUpMapMenu {
 
         trackingSwitch = (Switch) popupView.findViewById(R.id.tracking_switch_popup);
         satelliteSwitch = (Switch) popupView.findViewById(R.id.satellite_switch_popup);
-        raidTypeSpinner = (Spinner) popupView.findViewById(R.id.raid_type_spinner_popup);
+        showRouteSwitch = (Switch) popupView.findViewById(R.id.showYourRoute_switch_popup);
+        showSecondaryRouteSwitch = (Switch) popupView.findViewById(R.id.showSecondaryRoute_switch_popup);
+
         saveButton = (Button) popupView.findViewById(R.id.save_button_popup);
         cancelButton = (Button) popupView.findViewById(R.id.cancel_button_popup);
         zoomSeekBar = (SeekBar) popupView.findViewById(R.id.zoomSeekbar);
@@ -103,7 +105,8 @@ public class PopUpMapMenu {
     {
         trackingSwitch.setChecked(mapSetting.isTracking());
         satelliteSwitch.setChecked(mapSetting.isSatellite());
-        raidTypeSpinner.setSelection(mapSetting.getType());
+        showRouteSwitch.setChecked(mapSetting.isShowRoute());
+        showSecondaryRouteSwitch.setChecked(mapSetting.isShowSecondaryRoute());
         zoomSeekBar.setProgress(mapSetting.getZoom());
         zoomTextView.setText(String.valueOf(mapSetting.getZoom()));
     }
@@ -112,7 +115,8 @@ public class PopUpMapMenu {
     {
         mapSetting.setTracking(trackingSwitch.isChecked());
         mapSetting.setSatellite(satelliteSwitch.isChecked());
-        mapSetting.setType(raidTypeSpinner.getSelectedItemPosition());
+        mapSetting.setShowRoute(showRouteSwitch.isChecked());
+        mapSetting.setShowSecondaryRoute(showSecondaryRouteSwitch.isChecked());
         mapSetting.setZoom(zoomSeekBar.getProgress());
         //save in database
         MapSetting tmp = db.getFirstLoginMapSettings(mapSetting.getLogin());

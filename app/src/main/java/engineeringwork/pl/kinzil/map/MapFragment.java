@@ -80,8 +80,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             loc.setLatitude( Double.parseDouble(latitude));
             locationArrayListSecondary.add(loc);
         }
-
-        drawSecondaryLinePath(locationArrayListSecondary);
     }
 
     @Override
@@ -121,13 +119,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 @Override
                 public void onDismiss() {
                     setMap();
-                    polylineFinalMain.remove();
-                    String a = getMapMain();
-                    try {
-                        setMapSecondary(a);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
                 }
             });
         }
@@ -160,6 +151,24 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     {
         tracking();
         satellite(popUpMapMenu.getMapSetting().isSatellite());
+        showRoute(popUpMapMenu.getMapSetting().isShowRoute());
+        showSecondaryRoute(popUpMapMenu.getMapSetting().isShowSecondaryRoute());
+    }
+
+    private void  showSecondaryRoute(Boolean isShow)
+    {
+        if(isShow)
+            drawSecondaryLinePath();
+        else if(polylineFinalSecondary != null)
+            polylineFinalSecondary.remove();
+    }
+
+    private void  showRoute(Boolean isShow)
+    {
+        if(isShow)
+            drawPrimaryLinePath();
+        else if(polylineFinalMain != null)
+            polylineFinalMain.remove();
     }
 
     private void tracking()
@@ -183,7 +192,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                     if(checkLocation(locationArrayListMain.get(locationArrayListMain.size() - 1), location)) {
                         locationArrayListMain.add(location);
                         if(polylineFinalMain != null) polylineFinalMain.remove();
-                        drawPrimaryLinePath(locationArrayListMain);
+                        if(popUpMapMenu.getMapSetting().isShowRoute())
+                            drawPrimaryLinePath();
                     }
                 }
             }
@@ -194,21 +204,19 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         float result = a.distanceTo(b);
         return result > 5;
     }
-    private void drawPrimaryLinePath( ArrayList<Location> listLocsToDraw )
+    private synchronized void drawPrimaryLinePath()
     {
         if ( mMap == null )
-        {
             return;
-        }
-        if ( listLocsToDraw.size() < 2 )
-        {
+        if ( locationArrayListMain == null )
             return;
-        }
+        if ( locationArrayListMain.size() < 2 )
+            return;
         PolylineOptions options = new PolylineOptions();
         options.color( Color.parseColor( "#CC0000FF" ) );
         options.width( 5 );
         options.visible( true );
-        for ( Location locRecorded : listLocsToDraw )
+        for ( Location locRecorded : locationArrayListMain )
         {
             options.add( new LatLng( locRecorded.getLatitude(),
                     locRecorded.getLongitude() ) );
@@ -216,24 +224,21 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         polylineFinalMain = mMap.addPolyline( options );
     }
 
-    private void drawSecondaryLinePath( ArrayList<Location> listLocsToDraw )
+    private void drawSecondaryLinePath()
     {
         if ( mMap == null )
-        {
             return;
-        }
-        if ( listLocsToDraw.size() < 2 )
-        {
+        if ( locationArrayListSecondary == null )
             return;
-        }
+        if ( locationArrayListSecondary.size() < 2 )
+            return;
         PolylineOptions options = new PolylineOptions();
         options.color( Color.parseColor( "#999999" ) );
         options.width( 5 );
         options.visible( true );
-        for ( Location locRecorded : listLocsToDraw )
+        for ( Location locRecorded : locationArrayListSecondary )
         {
-            options.add( new LatLng( locRecorded.getLatitude(),
-                    locRecorded.getLongitude() ) );
+            options.add( new LatLng( locRecorded.getLatitude(), locRecorded.getLongitude()));
         }
         polylineFinalSecondary = mMap.addPolyline( options );
     }
@@ -241,12 +246,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private void satellite(boolean isSatellite)
     {
         if(isSatellite)
-        {
             mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-        }
         else
-        {
             mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        }
     }
 }

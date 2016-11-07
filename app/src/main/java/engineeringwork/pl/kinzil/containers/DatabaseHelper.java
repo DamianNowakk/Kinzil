@@ -41,7 +41,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String MAPSETTINGS_COL_2 = "TRACKING";
     private static final String MAPSETTINGS_COL_3 = "SATELLITE";
     private static final String MAPSETTINGS_COL_4 = "ZOOM";
-    private static final String MAPSETTINGS_COL_5 = "TYPE";
+    private static final String MAPSETTINGS_COL_5 = "ROUTE";
+    private static final String MAPSETTINGS_COL_6 = "SECONADRYROUTE";
 
 
     //singleton
@@ -91,7 +92,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + MAPSETTINGS_COL_2 + " INTEGER,"
                 + MAPSETTINGS_COL_3 + " INTEGER,"
                 + MAPSETTINGS_COL_4 + " INTEGER,"
-                + MAPSETTINGS_COL_5 + " INTEGER" + ")";
+                + MAPSETTINGS_COL_5 + " INTEGER,"
+                + MAPSETTINGS_COL_6 + " INTEGER" + ")";
         db.execSQL(CREATE_TABLE);
 
     }
@@ -103,6 +105,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_SETTINGS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_MAPSETTINGS);
         onCreate(db);
+    }
+
+    public void deleteDatabase()
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        onUpgrade(db, 1, 1);
     }
 
     public boolean userInsert(User user) {
@@ -139,7 +147,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(MAPSETTINGS_COL_2, mapSetting.isTracking());
         contentValues.put(MAPSETTINGS_COL_3, mapSetting.isSatellite());
         contentValues.put(MAPSETTINGS_COL_4, mapSetting.getZoom());
-        contentValues.put(MAPSETTINGS_COL_5, mapSetting.getType());
+        contentValues.put(MAPSETTINGS_COL_5, mapSetting.isShowRoute());
+        contentValues.put(MAPSETTINGS_COL_6, mapSetting.isShowSecondaryRoute());
         long result = db.insert(TABLE_MAPSETTINGS, null, contentValues);
         return result != -1;
     }
@@ -152,7 +161,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(MAPSETTINGS_COL_2, mapSetting.isTracking());
         contentValues.put(MAPSETTINGS_COL_3, mapSetting.isSatellite());
         contentValues.put(MAPSETTINGS_COL_4, mapSetting.getZoom());
-        contentValues.put(MAPSETTINGS_COL_5, mapSetting.getType());
+        contentValues.put(MAPSETTINGS_COL_5, mapSetting.isShowRoute());
+        contentValues.put(MAPSETTINGS_COL_6, mapSetting.isShowSecondaryRoute());
         long result = db.update(TABLE_MAPSETTINGS, contentValues, "ID = ?", new String[]{Integer.toString(mapSetting.getId())});
         return result != -1;
     }
@@ -172,13 +182,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 mapSetting.setTracking(true);
             else
                 mapSetting.setTracking(false);
-            String a = cursor.getString(3);
-            if (a.equals("1"))
+            if (cursor.getString(3).equals("1"))
                 mapSetting.setSatellite(true);
             else
                 mapSetting.setSatellite(false);
             mapSetting.setZoom(cursor.getInt(4));
-            mapSetting.setType(cursor.getInt(5));
+            if (cursor.getString(5).equals("1"))
+                mapSetting.setShowRoute(true);
+            else
+                mapSetting.setShowRoute(false);
+            if (cursor.getString(6).equals("1"))
+                mapSetting.setShowSecondaryRoute(true);
+            else
+                mapSetting.setShowSecondaryRoute(false);
+
         } finally {
             cursor.close();
         }
@@ -206,7 +223,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             else
                 mapSetting.setSatellite(false);
             mapSetting.setZoom(cursor.getInt(4));
-            mapSetting.setType(cursor.getInt(5));
+            if (cursor.getString(5).equals("1"))
+                mapSetting.setShowRoute(true);
+            else
+                mapSetting.setShowRoute(false);
+            if (cursor.getString(6).equals("1"))
+                mapSetting.setShowSecondaryRoute(true);
+            else
+                mapSetting.setShowSecondaryRoute(false);
         } finally {
             cursor.close();
         }
