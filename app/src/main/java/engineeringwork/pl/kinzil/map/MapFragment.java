@@ -157,18 +157,16 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     private void  showRoute(Boolean isShow)
     {
-        if(isShow) {
+        if(isShow)
             drawPrimaryLinePath();
-        }
         else if(polylineFinalMain != null)
             polylineFinalMain.remove();
     }
 
     private void  showSecondaryRoute(Boolean isShow)
     {
-        if(isShow) {
+        if(isShow)
             drawSecondaryLinePath();
-        }
         else if(polylineFinalSecondary != null)
             polylineFinalSecondary.remove();
     }
