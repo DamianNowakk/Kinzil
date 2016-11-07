@@ -12,7 +12,6 @@ import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -28,6 +27,10 @@ import android.view.MenuItem;
 import android.view.MenuInflater;
 import android.widget.PopupWindow;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 import engineeringwork.pl.kinzil.R;
@@ -36,8 +39,51 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     View view;
     private GoogleMap mMap;
     private PopUpMapMenu popUpMapMenu;
-    private ArrayList<Location> locationArrayList= new ArrayList<>();
-    private Polyline polylineFinal;
+    private ArrayList<Location> locationArrayListMain = new ArrayList<>();
+    private Polyline polylineFinalMain;
+    private ArrayList<Location> locationArrayListSecondary = null ;
+    private Polyline polylineFinalSecondary;
+
+    public String getMapMain()
+    {
+        JSONObject map = new JSONObject();
+        try {
+            JSONObject mainObj = new JSONObject();
+            JSONArray locationArray = new JSONArray();
+            mainObj.put("Size", locationArrayListMain.size());
+            for(int i = 0; i< locationArrayListMain.size(); i++)
+            {
+                JSONObject location = new JSONObject();
+                location.put("Longitude", locationArrayListMain.get(i).getLongitude());
+                location.put("Latitude", locationArrayListMain.get(i).getLatitude());
+                locationArray.put(location);
+            }
+            mainObj.put("Location", locationArray);
+            return mainObj.toString();
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public void setMapSecondary(String map) throws JSONException {
+        locationArrayListSecondary = new ArrayList<>();
+        JSONObject obj = new JSONObject(map);
+        int size =  Integer.parseInt(obj.getString("Size"));
+        JSONArray location = obj.getJSONArray("Location");
+        for(int i = 0; i < size; i++)
+        {
+            Location loc = new Location("dummyprovider");
+            String longitude = location.getJSONObject(i).getString("Longitude");
+            String latitude = location.getJSONObject(i).getString("Latitude");
+            loc.setLongitude( Double.parseDouble(longitude));
+            loc.setLatitude( Double.parseDouble(latitude));
+            locationArrayListSecondary.add(loc);
+        }
+
+        drawSecondaryLinePath(locationArrayListSecondary);
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,6 +121,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 @Override
                 public void onDismiss() {
                     setMap();
+                    polylineFinalMain.remove();
+                    String a = getMapMain();
+                    try {
+                        setMapSecondary(a);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
             });
         }
@@ -123,14 +176,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                     mMap.animateCamera(cu);
                 }
 
-                if(locationArrayList.size() == 0) {
-                    locationArrayList.add(location);
+                if(locationArrayListMain.size() == 0) {
+                    locationArrayListMain.add(location);
                 }
                 else {
-                    if(checkLocation(locationArrayList.get(locationArrayList.size() - 1), location)) {
-                        locationArrayList.add(location);
-                        if(polylineFinal != null) polylineFinal.remove();
-                        drawPrimaryLinePath(locationArrayList);
+                    if(checkLocation(locationArrayListMain.get(locationArrayListMain.size() - 1), location)) {
+                        locationArrayListMain.add(location);
+                        if(polylineFinalMain != null) polylineFinalMain.remove();
+                        drawPrimaryLinePath(locationArrayListMain);
                     }
                 }
             }
@@ -147,26 +200,42 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         {
             return;
         }
-
         if ( listLocsToDraw.size() < 2 )
         {
             return;
         }
-
         PolylineOptions options = new PolylineOptions();
-
         options.color( Color.parseColor( "#CC0000FF" ) );
         options.width( 5 );
         options.visible( true );
-
         for ( Location locRecorded : listLocsToDraw )
         {
             options.add( new LatLng( locRecorded.getLatitude(),
                     locRecorded.getLongitude() ) );
         }
+        polylineFinalMain = mMap.addPolyline( options );
+    }
 
-        polylineFinal = mMap.addPolyline( options );
-
+    private void drawSecondaryLinePath( ArrayList<Location> listLocsToDraw )
+    {
+        if ( mMap == null )
+        {
+            return;
+        }
+        if ( listLocsToDraw.size() < 2 )
+        {
+            return;
+        }
+        PolylineOptions options = new PolylineOptions();
+        options.color( Color.parseColor( "#999999" ) );
+        options.width( 5 );
+        options.visible( true );
+        for ( Location locRecorded : listLocsToDraw )
+        {
+            options.add( new LatLng( locRecorded.getLatitude(),
+                    locRecorded.getLongitude() ) );
+        }
+        polylineFinalSecondary = mMap.addPolyline( options );
     }
 
     private void satellite(boolean isSatellite)
