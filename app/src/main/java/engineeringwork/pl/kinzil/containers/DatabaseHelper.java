@@ -237,7 +237,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return mapSetting;
     }
 
-    public boolean settingInsert(Setting setting) // trzeba przetestowac
+    public boolean settingInsert(Setting setting)
     {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -248,7 +248,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return result != -1;
     }
 
-    public boolean settingUpdate(Setting setting) // trzeba przetestowac
+    public boolean settingUpdate(Setting setting)
     {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -260,7 +260,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return result != -1;
     }
 
-    public Setting getFirstLoginSetting(String login) // trzeba przetestowac
+    public Setting getFirstLoginSetting(String login)
     {
         SQLiteDatabase db = this.getWritableDatabase();
         Setting setting = new Setting();

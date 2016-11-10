@@ -45,6 +45,12 @@ public class Setting {
         this.weight = weight;
     }
 
+    public Setting(String login, int wheelSize, int weight) {
+        this.login = login;
+        this.wheelSize = wheelSize;
+        this.weight = weight;
+    }
+
     public Setting(String login) {
         this.login = login;
     }

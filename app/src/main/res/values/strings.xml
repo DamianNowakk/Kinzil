@@ -30,6 +30,11 @@
     <string name="repeat_password">Repeat Password</string>
     <string name="show_route">Show route</string>
     <string name="show_secondary_route">Show secondary route</string>
+    <string name="edit">Edit</string>
+    <string name="weight">Weight:</string>
+    <string name="wheel_size">Wheel size:</string>
+    <string name="your_weight_0kg">Your weight: 0kg</string>
+    <string name="wheel_size_0mm">Wheel size: 0mm</string>
 
     <string-array name="spinner_item_map_menu">
         <item>Free ride(without drawing</item>
