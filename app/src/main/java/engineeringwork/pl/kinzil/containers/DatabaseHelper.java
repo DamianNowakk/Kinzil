@@ -252,11 +252,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(MAPSETTINGS_COL_0, setting.getId());
-        contentValues.put(MAPSETTINGS_COL_1, setting.getLogin());
-        contentValues.put(MAPSETTINGS_COL_2, setting.getWheelSize());
-        contentValues.put(MAPSETTINGS_COL_3, setting.getWeight());
-        long result = db.update(TABLE_MAPSETTINGS, contentValues, "ID = ?", new String[]{Integer.toString(setting.getId())});
+        contentValues.put(SETTINGS_COL_0, setting.getId());
+        contentValues.put(SETTINGS_COL_1, setting.getLogin());
+        contentValues.put(SETTINGS_COL_2, setting.getWheelSize());
+        contentValues.put(SETTINGS_COL_3, setting.getWeight());
+        long result = db.update(TABLE_SETTINGS, contentValues, "ID = ?", new String[]{Integer.toString(setting.getId())});
         return result != -1;
     }
 
