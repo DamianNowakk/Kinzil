@@ -1,14 +1,12 @@
 package engineeringwork.pl.kinzil.counter;
 
-/**
- * Created by Maciej on 2016-11-04.
- */
-
 public class CscAnalyser {
-    private double mWheelSize = 0.7d; // Default 700mm
+    private double mWheelSize = 0.72d; // Default 700mm
 
     private SpeedCadenceMeasurement prevMeasurement;
     private double mSpeed;
+    private double speedKmH;
+    private double newDistance;
     private double mCadence;
 
     public void addData(SpeedCadenceMeasurement currMeasurement) {
@@ -18,10 +16,11 @@ public class CscAnalyser {
             double wheelTimeDiff = currMeasurement.lastWheelEventTime - prevMeasurement.lastWheelEventTime;
             if (wheelTimeDiff > 0){
                 long revs = currMeasurement.cumulativeWheelRevolutions - prevMeasurement.cumulativeWheelRevolutions;
-
                 mSpeed = revs * Math.PI * mWheelSize / wheelTimeDiff;
+                speedKmH = mSpeed * 3.6;
+                newDistance = revs * Math.PI * mWheelSize;
             }else {
-                mSpeed = 0;
+                mSpeed = speedKmH = newDistance = 0;
             }
 
             double crankTimeDiff = currMeasurement.lastCrankEventTime - prevMeasurement.lastCrankEventTime;
@@ -46,8 +45,13 @@ public class CscAnalyser {
         return mSpeed;
     }
 
+    public double getSpeedKmH(){
+        return speedKmH;
+    }
+
     public double getCadence(){
         return mCadence;
     }
 
+    public double getNewDistance () { return newDistance; }
 }

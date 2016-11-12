@@ -1,11 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <TextView
+        android:text="Dane z licznika"
+        android:layout_width="match_parent"
+        android:id="@+id/textView2"
+        android:textAlignment="center"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:textSize="20sp"
+        android:layout_height="120dp" />
 
     <TableLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:stretchColumns="*"
+        android:layout_marginLeft="0dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true">
 
@@ -81,7 +93,7 @@
                         android:layout_marginTop="8dp" />
 
                     <TextView
-                        android:text="0 km"
+                        android:text="0 h 0 m 0 s"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/result2"
@@ -127,7 +139,7 @@
                         android:layout_marginTop="8dp" />
 
                     <TextView
-                        android:text="0 km"
+                        android:text="0 km/h"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/result3"
@@ -167,7 +179,7 @@
                         android:layout_marginTop="8dp" />
 
                     <TextView
-                        android:text="0 km"
+                        android:text="0 km/h"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/result4"
@@ -213,7 +225,7 @@
                         android:layout_marginTop="8dp" />
 
                     <TextView
-                        android:text="0 km"
+                        android:text="0"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/result5"
@@ -253,7 +265,7 @@
                         android:layout_marginTop="8dp" />
 
                     <TextView
-                        android:text="0 km"
+                        android:text="0 km/h"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/result6"
@@ -268,29 +280,15 @@
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="match_parent">
 
             <Button
-                android:text="Change Unit"
+                android:text="START"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/changeUnit"
-                android:textAllCaps="false"
-                android:layout_marginBottom="126dp"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:textAlignment="center" />
+                android:id="@+id/startTrip" />
         </TableRow>
-    </TableLayout>
 
-    <TextView
-        android:text="Dane z licznika"
-        android:layout_width="match_parent"
-        android:id="@+id/textView2"
-        android:textAlignment="center"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:textSize="20sp"
-        android:layout_height="120dp" />
+    </TableLayout>
 
 </RelativeLayout>

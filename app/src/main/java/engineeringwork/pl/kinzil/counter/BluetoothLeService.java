@@ -35,8 +35,6 @@ import android.util.Log;
 import com.movisens.smartgattlib.Characteristic;
 import com.movisens.smartgattlib.Descriptor;
 import com.movisens.smartgattlib.characteristics.BatteryLevel;
-import com.movisens.smartgattlib.characteristics.BodySensorLocation;
-import com.movisens.smartgattlib.characteristics.HeartRateMeasurement;
 
 import java.util.List;
 import java.util.UUID;
@@ -143,8 +141,9 @@ public class BluetoothLeService extends Service {
                     + "Crank Turns: " + csc.cumulativeCrankRevolutions + "\n"
                     + "Crank Time: " + csc.lastCrankEventTime + "\n"
                     + "Cadence: " + mCscAnalyser.getCadence());
-            intent.putExtra("EXTRA_SPEED", mCscAnalyser.getSpeed());
-            intent.putExtra("EXTRA_CADENCE", mCscAnalyser.getCadence());
+            intent.putExtra("EXTRA_SPEED", String.valueOf(mCscAnalyser.getSpeedKmH()));
+            intent.putExtra("WHEEL_TIME", String.valueOf(csc.lastWheelEventTime));
+            intent.putExtra("NEW_DISTANCE", mCscAnalyser.getNewDistance());
         }else {
             // For all other profiles, writes the data formatted in HEX.
             if (data != null && data.length > 0) {

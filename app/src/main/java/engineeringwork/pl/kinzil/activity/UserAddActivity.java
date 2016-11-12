@@ -29,7 +29,6 @@ public class UserAddActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_add);
-        addListenerToButton();
 
         //autorun
         SharedPreferences shared = getSharedPreferences("data",MODE_PRIVATE);
@@ -154,21 +153,5 @@ public class UserAddActivity extends AppCompatActivity {
             InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(ibinder, 0);
         }
-    }
-
-    private void addListenerToButton() {
-        Button buttonOne = (Button) findViewById(R.id.Szymon);
-        buttonOne.setOnClickListener(new Button.OnClickListener() {
-            public void onClick(View v) {
-                chuj();
-            }
-        });
-    }
-
-    private void chuj()
-    {
-        Intent intent = new Intent(this, BluetoothActivity.class);
-        startActivity(intent);
-
     }
 }

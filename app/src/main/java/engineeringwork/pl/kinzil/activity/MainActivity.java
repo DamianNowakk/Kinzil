@@ -28,10 +28,7 @@ import android.view.MenuItem;
 import android.widget.FrameLayout;
 
 import com.movisens.smartgattlib.Characteristic;
-import com.movisens.smartgattlib.Service;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -53,13 +50,10 @@ public class MainActivity extends AppCompatActivity
     private TabLayout tabLayout;
     private FrameLayout frameLayout;
     private BluetoothLeService mBluetoothLeService;
-    private String mDeviceName;
     private String mDeviceAddress;
-    private boolean mConnected = false;
     private BluetoothGattCharacteristic mNotifyCharacteristic;
-    private ArrayList<ArrayList<BluetoothGattCharacteristic>> mGattCharacteristics =
-            new ArrayList<ArrayList<BluetoothGattCharacteristic>>();
-    private final static String CSC_MEASUREMENT = "CSC Measurement";
+    private boolean mConnected = false;
+    private double distance;
 
     public String getLogin() {
         return login;
@@ -111,24 +105,13 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.d("on resume", "true");
-        final Intent intent = getIntent();
-        if(intent != null && intent.getStringExtra("DEVICE_NAME") != null) {
-            mDeviceName = intent.getStringExtra("DEVICE_NAME");
-            mDeviceAddress = intent.getStringExtra("DEVICE_ADDRESS");
+    private void bindUpdateService (Intent intent) {
+        //mDeviceName = intent.getStringExtra("DEVICE_NAME");
+        mDeviceAddress = intent.getStringExtra("DEVICE_ADDRESS");
 
-            Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);
-            boolean isConnected = bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
-            Log.d("Is connected = ", String.valueOf(isConnected));
-        }
-
-        registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
-        if (mBluetoothLeService != null) {
-            final boolean result = mBluetoothLeService.connect(mDeviceAddress);
-        }
+        Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);
+        boolean isConnected = bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
+        Log.d("Is connected = ", String.valueOf(isConnected));
     }
 
     //może jest jakaś wbudowana funkcja getCharacteristic ????
@@ -151,6 +134,35 @@ public class MainActivity extends AppCompatActivity
         return null;
     }
 
+    private final BroadcastReceiver mGattUpdateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+            if (BluetoothLeService.ACTION_GATT_CONNECTED.equals(action)) {
+                mConnected = true;
+                mSectionsPagerAdapter.counterFragment.setButtonStatus(true, "START");
+                //updateConnectionState(R.string.connected);
+                invalidateOptionsMenu();
+            } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
+                mConnected = false;
+                mSectionsPagerAdapter.counterFragment.setButtonStatus(false, "Counter disconnected");
+                //updateConnectionState(R.string.disconnected);
+                //clearUI();
+            } else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
+                // Show all the supported services and characteristics on the user interface.
+                // displayGattServices(mBluetoothLeService.getSupportedGattServices());
+
+            } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
+                String speed = intent.getStringExtra("EXTRA_SPEED");
+                String wheelTime = intent.getStringExtra("WHEEL_TIME");
+                Double newDistance = intent.getDoubleExtra("NEW_DISTANCE", 0.0);
+                distance += newDistance;
+
+                displayData(intent.getStringExtra(BluetoothLeService.EXTRA_DATA), speed, wheelTime, distance);
+            }
+        }
+    };
+
     public void readCharacteristic(BluetoothGattCharacteristic characteristic)
     {
         final int charaProperties = characteristic.getProperties();
@@ -172,9 +184,32 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        final Intent intent = getIntent();
+
+        //Check if BluetoothActivity send intent with Bluetooth DEVICE_NAME and DEVICE_ADDRESS
+        if(intent != null && intent.getStringExtra("DEVICE_NAME") != null) {
+            bindUpdateService(intent);
+        }
+
+        registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
+        if (mBluetoothLeService != null) {
+            final boolean result = mBluetoothLeService.connect(mDeviceAddress);
+        }
+    }
+
+    @Override
     protected void onPause() {
         super.onPause();
         unregisterReceiver(mGattUpdateReceiver);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unbindService(mServiceConnection);
+        mBluetoothLeService = null;
     }
 
     private static IntentFilter makeGattUpdateIntentFilter() {
@@ -186,32 +221,10 @@ public class MainActivity extends AppCompatActivity
         return intentFilter;
     }
 
-    private final BroadcastReceiver mGattUpdateReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            final String action = intent.getAction();
-            if (BluetoothLeService.ACTION_GATT_CONNECTED.equals(action)) {
-                mConnected = true;
-                //updateConnectionState(R.string.connected);
-                invalidateOptionsMenu();
-            } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
-                mConnected = false;
-                //updateConnectionState(R.string.disconnected);
-                //clearUI();
-            } else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
-                // Show all the supported services and characteristics on the user interface.
-               // displayGattServices(mBluetoothLeService.getSupportedGattServices());
-            } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
-                displayData(intent.getStringExtra(BluetoothLeService.EXTRA_DATA));
-            }
-        }
-    };
-
-    private void displayData(String data) {
-        if (data != null) {
-           // mDataField.setText(data)
-            mSectionsPagerAdapter.counterFragment.changeText(data);
-            Log.d("dane z licznika", data);
+    private void displayData(String cscData, String speed, String wheelTime, Double distance) {
+        if (cscData != null) {
+            mSectionsPagerAdapter.counterFragment.changeText(cscData, speed, wheelTime, distance);
+            Log.d("CSC Measurement data", cscData);
         }
     }
 

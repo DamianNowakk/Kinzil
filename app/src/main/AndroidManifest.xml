@@ -54,8 +54,6 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCI8oKC5sTCQZQruZGcnjWLO6qU8uQalak" />
 
-        <activity android:name=".activity.BluetoothActivity" />
-
         <service
             android:name=".counter.BluetoothLeService"
             android:enabled="true"
