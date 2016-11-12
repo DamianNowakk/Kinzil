@@ -3,7 +3,13 @@
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-
+    <string name="result1">Distance</string>
+    <string name="result2">Duration</string>
+    <string name="result3">Avg. Speed</string>
+    <string name="result4">Max. Speed</string>
+    <string name="result5">Calories</string>
+    <string name="result6">Speed</string>
+    <string name="action_settings">Settings</string>
     <string name="connection">Connection</string>
     <string name="settings">Settings</string>
     <string name="history">History</string>
@@ -35,6 +41,10 @@
     <string name="wheel_size">Wheel size:</string>
     <string name="your_weight_0kg">Your weight: 0kg</string>
     <string name="wheel_size_0mm">Wheel size: 0mm</string>
+    //bluetooth informations
+    <string name="low_energy_bluetooth_is_not_supported">Low energy bluetooth is not supported</string>
+    <string name="bluetooth_is_not_supported">bluetooth is not supported</string>
+
 
     <string-array name="spinner_item_map_menu">
         <item>Free ride(without drawing</item>
