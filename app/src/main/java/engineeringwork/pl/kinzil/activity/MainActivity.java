@@ -28,6 +28,7 @@ import android.view.MenuItem;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 
+import com.google.android.gms.cast.CastRemoteDisplayLocalService;
 import com.movisens.smartgattlib.Characteristic;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +44,11 @@ import engineeringwork.pl.kinzil.setting.SettingsFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    public interface Callbacks {
+        public void onBackPressedCallBack();
+    }
+    private Callbacks mCallbacks;
 
     private String login;
     private ViewPager mViewPager;
@@ -95,7 +101,9 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
+        if(mCallbacks != null){
+            mCallbacks.onBackPressedCallBack();
+        }else if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else if(mViewPager.getVisibility() == View.GONE && tabLayout.getVisibility() == View.GONE) {
             tabLayout.setVisibility(View.VISIBLE);
@@ -266,7 +274,9 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_settings) {
             fragmentManager.beginTransaction().replace(R.id.fragment_layout, new SettingsFragment()).commit();
         } else if (id == R.id.nav_history) {
-            fragmentManager.beginTransaction().replace(R.id.fragment_layout, new HistoryFragment()).commit();
+            Fragment fragment = new HistoryFragment();
+            fragmentManager.beginTransaction().replace(R.id.fragment_layout, fragment).commit();
+            mCallbacks = (Callbacks) fragment;
         } else if (id == R.id.nav_aboutus) {
 
         } else if (id == R.id.nav_logout) {
