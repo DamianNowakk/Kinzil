@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity
         public void onBackPressedCallBack();
     }
     private Callbacks mCallbacks;
+    private HistoryFragment historyFragment;
 
     private String login;
     private ViewPager mViewPager;
@@ -101,7 +102,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if(mCallbacks != null){
+        if(historyFragment != null && historyFragment.isVisible()) {
             mCallbacks.onBackPressedCallBack();
         }else if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
@@ -274,9 +275,11 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_settings) {
             fragmentManager.beginTransaction().replace(R.id.fragment_layout, new SettingsFragment()).commit();
         } else if (id == R.id.nav_history) {
-            Fragment fragment = new HistoryFragment();
-            fragmentManager.beginTransaction().replace(R.id.fragment_layout, fragment).commit();
-            mCallbacks = (Callbacks) fragment;
+            historyFragment = new HistoryFragment();
+            historyFragment.setDrawer((DrawerLayout) findViewById(R.id.drawer_layout));
+            fragmentManager.beginTransaction().replace(R.id.fragment_layout, historyFragment).commit();
+
+            mCallbacks = (Callbacks) historyFragment;
         } else if (id == R.id.nav_aboutus) {
 
         } else if (id == R.id.nav_logout) {

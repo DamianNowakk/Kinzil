@@ -4,6 +4,8 @@ import android.app.ActionBar;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,6 +30,7 @@ import engineeringwork.pl.kinzil.containers.TripArrayAdapter;
 public class HistoryFragment extends ListFragment implements AdapterView.OnItemClickListener, MainActivity.Callbacks {
     View view;
     private ArrayList<Trip> historyData = new ArrayList<>();
+    private DrawerLayout drawer;
     private View detailsView;
 
     @Nullable
@@ -58,8 +61,11 @@ public class HistoryFragment extends ListFragment implements AdapterView.OnItemC
 
     @Override
     public void onBackPressedCallBack() {
-        Log.d("Kliklem","Tyl");
-        collapse();
+        if(drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        }else{
+            collapse();
+        }
     }
 
     //TODO: osobna klasa?
@@ -137,5 +143,9 @@ public class HistoryFragment extends ListFragment implements AdapterView.OnItemC
         historyData.add(new Trip(6, "aaa1", 3.0f, 3.0f, 3.0f,123,"111", "2", "chybanie00"));
         historyData.add(new Trip(7, "aaa2", 4.0f, 4.0f, 4.0f,123,"111", "3", "chybanie00"));
         historyData.add(new Trip(8, "aaa3", 5.0f, 5.0f, 5.0f,123,"111", "4", "chybanie00"));
+    }
+
+    public void setDrawer(DrawerLayout drawer) {
+        this.drawer = drawer;
     }
 }
