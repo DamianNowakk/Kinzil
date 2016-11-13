@@ -12,8 +12,10 @@ import android.view.animation.Animation;
 import android.view.animation.Transformation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -26,16 +28,16 @@ import engineeringwork.pl.kinzil.containers.TripArrayAdapter;
 public class HistoryFragment extends ListFragment implements AdapterView.OnItemClickListener, MainActivity.Callbacks {
     View view;
     private ArrayList<Trip> historyData = new ArrayList<>();
+    private View detailsView;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.history_fragment, container, false);
+        detailsView  = view.findViewById(R.id.details);
 
-        historyData.add(new Trip(1, "aaa", 2.0f, 2.0f, 2.0f,123,"111", "69", "chybanie00"));
-        historyData.add(new Trip(2, "aaa1", 2.0f, 2.0f, 2.0f,123,"111", "69", "chybanie00"));
-        historyData.add(new Trip(3, "aaa2", 2.0f, 2.0f, 2.0f,123,"111", "69", "chybanie00"));
-        historyData.add(new Trip(4, "aaa3", 2.0f, 2.0f, 2.0f,123,"111", "69", "chybanie00"));
+        getDataFromDataBase();
+
         return view;
     }
 
@@ -50,29 +52,32 @@ public class HistoryFragment extends ListFragment implements AdapterView.OnItemC
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Toast.makeText(getActivity(),"Item: " + position, Toast.LENGTH_SHORT).show();
-        try {
-            expand();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        populateDetailsView(historyData.get(position));
+        expand();
     }
 
-    public void expand() throws InterruptedException {
-        final View v = view.findViewById(R.id.details);
-        v.measure(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+    @Override
+    public void onBackPressedCallBack() {
+        Log.d("Kliklem","Tyl");
+        collapse();
+    }
+
+    //TODO: osobna klasa?
+    public void expand() {
+        detailsView.measure(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         final int targetHeight = view.getHeight();
 
-        v.getLayoutParams().height = 1;
-        v.setVisibility(View.VISIBLE);
+        detailsView.getLayoutParams().height = 1;
+        detailsView.setVisibility(View.VISIBLE);
         Animation a = new Animation(){
 
             @Override
             protected void applyTransformation(float interpolatedTime, Transformation t) {
                 //v.getLayoutParams().height = targetHeight * (int)interpolatedTime;
-                v.getLayoutParams().height = interpolatedTime == 1
+                detailsView.getLayoutParams().height = interpolatedTime == 1
                         ? RelativeLayout.LayoutParams.MATCH_PARENT
                         : (int)(targetHeight * interpolatedTime);
-                v.requestLayout();
+                detailsView.requestLayout();
             }
 
             @Override
@@ -80,23 +85,23 @@ public class HistoryFragment extends ListFragment implements AdapterView.OnItemC
                 return true;
             }
         };
-        a.setDuration((int)(targetHeight / v.getContext().getResources().getDisplayMetrics().density));
-        v.startAnimation(a);
+        a.setDuration((int)(targetHeight / detailsView.getContext().getResources().getDisplayMetrics().density));
+        detailsView.startAnimation(a);
     }
 
+    //TODO: osobna klasa?
     public void collapse() {
-        final View v = view.findViewById(R.id.details);
-        final int initialHeight = v.getMeasuredHeight();
+        final int initialHeight = detailsView.getMeasuredHeight();
 
         Animation a = new Animation(){
 
             @Override
             protected void applyTransformation(float interpolatedTime, Transformation t) {
                 if(interpolatedTime == 1) {
-                    v.setVisibility(View.GONE);
+                    detailsView.setVisibility(View.GONE);
                 }else{
-                    v.getLayoutParams().height = initialHeight - (int)(initialHeight * interpolatedTime);
-                    v.requestLayout();
+                    detailsView.getLayoutParams().height = initialHeight - (int)(initialHeight * interpolatedTime);
+                    detailsView.requestLayout();
                 }
             }
 
@@ -105,13 +110,32 @@ public class HistoryFragment extends ListFragment implements AdapterView.OnItemC
                 return true;
             }
         };
-        a.setDuration((int)(initialHeight / v.getContext().getResources().getDisplayMetrics().density));
-        v.startAnimation(a);
+        a.setDuration((int)(initialHeight / detailsView.getContext().getResources().getDisplayMetrics().density));
+        detailsView.startAnimation(a);
     }
 
-    @Override
-    public void onBackPressedCallBack() {
-        Log.d("Kliklem","Tyl");
-        collapse();
+    private void populateDetailsView(Trip trip) {
+
+        ImageView time = (ImageView) detailsView.findViewById(R.id.image);
+        TextView avgSpeed = (TextView)detailsView.findViewById(R.id.avgSpeed);
+        TextView date = (TextView)detailsView.findViewById(R.id.date);
+        TextView distance = (TextView) detailsView.findViewById(R.id.distance);
+
+        avgSpeed.setText(String.valueOf(trip.getAvgSpeed()));
+        date.setText(String.valueOf(trip.getDate()));
+        distance.setText(String.valueOf(trip.getDistance()));
+        time.setImageResource(R.mipmap.ic_time_icon);
+
+    }
+
+    private void getDataFromDataBase(){
+        historyData.add(new Trip(1, "aaa", 2.0f, 2.0f, 2.0f,123,"111", "1", "chybanie00"));
+        historyData.add(new Trip(2, "aaa1", 3.0f, 3.0f, 3.0f,123,"111", "2", "chybanie00"));
+        historyData.add(new Trip(3, "aaa2", 4.0f, 4.0f, 4.0f,123,"111", "3", "chybanie00"));
+        historyData.add(new Trip(4, "aaa3", 5.0f, 5.0f, 5.0f,123,"111", "4", "chybanie00"));
+        historyData.add(new Trip(5, "aaa", 2.0f, 2.0f, 2.0f,123,"111", "1", "chybanie00"));
+        historyData.add(new Trip(6, "aaa1", 3.0f, 3.0f, 3.0f,123,"111", "2", "chybanie00"));
+        historyData.add(new Trip(7, "aaa2", 4.0f, 4.0f, 4.0f,123,"111", "3", "chybanie00"));
+        historyData.add(new Trip(8, "aaa3", 5.0f, 5.0f, 5.0f,123,"111", "4", "chybanie00"));
     }
 }
