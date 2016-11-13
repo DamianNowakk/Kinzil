@@ -31,6 +31,7 @@ import engineeringwork.pl.kinzil.activity.MainActivity;
 import engineeringwork.pl.kinzil.containers.DatabaseHelper;
 import engineeringwork.pl.kinzil.containers.Trip;
 import engineeringwork.pl.kinzil.containers.TripArrayAdapter;
+import engineeringwork.pl.kinzil.containers.ViewAnimations;
 
 public class HistoryFragment extends ListFragment implements AdapterView.OnItemClickListener, MainActivity.Callbacks, OnMapReadyCallback {
     View view;
@@ -100,62 +101,10 @@ public class HistoryFragment extends ListFragment implements AdapterView.OnItemC
         trips.addAll(databaseHelper.getTrip(login));
     }
 
-    //TODO: osobna klasa?
-    public void expand() {
-        detailsView.measure(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        final int targetHeight = view.getHeight();
-
-        detailsView.getLayoutParams().height = 1;
-        detailsView.setVisibility(View.VISIBLE);
-        Animation a = new Animation(){
-
-            @Override
-            protected void applyTransformation(float interpolatedTime, Transformation t) {
-                //v.getLayoutParams().height = targetHeight * (int)interpolatedTime;
-                detailsView.getLayoutParams().height = interpolatedTime == 1
-                        ? RelativeLayout.LayoutParams.MATCH_PARENT
-                        : (int)(targetHeight * interpolatedTime);
-                detailsView.requestLayout();
-            }
-
-            @Override
-            public boolean willChangeBounds() {
-                return true;
-            }
-        };
-        a.setDuration((int)(targetHeight / detailsView.getContext().getResources().getDisplayMetrics().density));
-        detailsView.startAnimation(a);
-    }
-
-    //TODO: osobna klasa?
-    public void collapse() {
-        final int initialHeight = detailsView.getMeasuredHeight();
-
-        Animation a = new Animation(){
-
-            @Override
-            protected void applyTransformation(float interpolatedTime, Transformation t) {
-                if(interpolatedTime == 1) {
-                    detailsView.setVisibility(View.GONE);
-                }else{
-                    detailsView.getLayoutParams().height = initialHeight - (int)(initialHeight * interpolatedTime);
-                    detailsView.requestLayout();
-                }
-            }
-
-            @Override
-            public boolean willChangeBounds() {
-                return true;
-            }
-        };
-        a.setDuration((int)(initialHeight / detailsView.getContext().getResources().getDisplayMetrics().density));
-        detailsView.startAnimation(a);
-    }
-
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+    public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
         populateDetailsView(trips.get(position));
-        expand();
+        ViewAnimations.expand(detailsView, view.getHeight());
     }
 
     @Override
@@ -163,7 +112,7 @@ public class HistoryFragment extends ListFragment implements AdapterView.OnItemC
         if(drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         }else{
-            collapse();
+            ViewAnimations.collapse(detailsView);
         }
     }
 
