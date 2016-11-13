@@ -276,9 +276,7 @@ public class MainActivity extends AppCompatActivity
             fragmentManager.beginTransaction().replace(R.id.fragment_layout, new SettingsFragment()).commit();
         } else if (id == R.id.nav_history) {
             historyFragment = new HistoryFragment();
-            historyFragment.setDrawer((DrawerLayout) findViewById(R.id.drawer_layout));
             fragmentManager.beginTransaction().replace(R.id.fragment_layout, historyFragment).commit();
-
             mCallbacks = (Callbacks) historyFragment;
         } else if (id == R.id.nav_aboutus) {
 
