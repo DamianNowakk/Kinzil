@@ -8,19 +8,18 @@ import android.widget.RelativeLayout;
 
 public final class ViewAnimations {
 
-    public static void expand(final View detailsView, final int targetHeight) {
-        detailsView.measure(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        detailsView.getLayoutParams().height = 1;
-        detailsView.setVisibility(View.VISIBLE);
+    public static void expand(final View viewToExpand, final int targetHeight) {
+        viewToExpand.measure(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        viewToExpand.getLayoutParams().height = 1;
+        viewToExpand.setVisibility(View.VISIBLE);
         Animation a = new Animation(){
 
             @Override
             protected void applyTransformation(float interpolatedTime, Transformation t) {
-                //v.getLayoutParams().height = targetHeight * (int)interpolatedTime;
-                detailsView.getLayoutParams().height = interpolatedTime == 1
+                viewToExpand.getLayoutParams().height = interpolatedTime == 1
                         ? RelativeLayout.LayoutParams.MATCH_PARENT
                         : (int)(targetHeight * interpolatedTime);
-                detailsView.requestLayout();
+                viewToExpand.requestLayout();
             }
 
             @Override
@@ -28,22 +27,22 @@ public final class ViewAnimations {
                 return true;
             }
         };
-        a.setDuration((int)(targetHeight / detailsView.getContext().getResources().getDisplayMetrics().density));
-        detailsView.startAnimation(a);
+        a.setDuration((int)(targetHeight / viewToExpand.getContext().getResources().getDisplayMetrics().density));
+        viewToExpand.startAnimation(a);
     }
 
-    public static void collapse(final View detailsView) {
-        final int initialHeight = detailsView.getMeasuredHeight();
+    public static void collapse(final View viewToCollapse) {
+        final int initialHeight = viewToCollapse.getMeasuredHeight();
 
         Animation a = new Animation(){
 
             @Override
             protected void applyTransformation(float interpolatedTime, Transformation t) {
                 if(interpolatedTime == 1) {
-                    detailsView.setVisibility(View.GONE);
+                    viewToCollapse.setVisibility(View.GONE);
                 }else{
-                    detailsView.getLayoutParams().height = initialHeight - (int)(initialHeight * interpolatedTime);
-                    detailsView.requestLayout();
+                    viewToCollapse.getLayoutParams().height = initialHeight - (int)(initialHeight * interpolatedTime);
+                    viewToCollapse.requestLayout();
                 }
             }
 
@@ -52,8 +51,8 @@ public final class ViewAnimations {
                 return true;
             }
         };
-        a.setDuration((int)(initialHeight / detailsView.getContext().getResources().getDisplayMetrics().density));
-        detailsView.startAnimation(a);
+        a.setDuration((int)(initialHeight / viewToCollapse.getContext().getResources().getDisplayMetrics().density));
+        viewToCollapse.startAnimation(a);
     }
 
 }

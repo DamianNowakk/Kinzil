@@ -107,6 +107,7 @@ public class HistoryFragment extends ListFragment implements AdapterView.OnItemC
         ViewAnimations.expand(detailsView, view.getHeight());
     }
 
+    //TODO: wrocic do tabview przy kliknieciu
     @Override
     public void onBackPressedCallBack() {
         if(drawer.isDrawerOpen(GravityCompat.START)) {
