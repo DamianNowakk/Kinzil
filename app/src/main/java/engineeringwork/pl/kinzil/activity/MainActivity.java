@@ -66,6 +66,7 @@ public class MainActivity extends AppCompatActivity
     public String getLogin() {
         return login;
     }
+    public SectionsPagerAdapter getmSectionsPagerAdapter() { return mSectionsPagerAdapter; }
     public BluetoothLeService getmBluetoothLeService() { return mBluetoothLeService; }
 
     @Override
@@ -116,68 +117,67 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private void bindUpdateService (Intent intent) {
-        //mDeviceName = intent.getStringExtra("DEVICE_NAME");
-        mDeviceAddress = intent.getStringExtra("DEVICE_ADDRESS");
-
-        Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);
-        boolean isConnected = bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
-        Log.d("Is connected = ", String.valueOf(isConnected));
-    }
-
-    //może jest jakaś wbudowana funkcja getCharacteristic ????
-    public BluetoothGattCharacteristic getCharacteristic(UUID characteristicUUID){
-        List<BluetoothGattService> gattServices = mBluetoothLeService.getSupportedGattServices();
-        String expected = Characteristic.lookup(characteristicUUID, "");
-        //mBluetoothLeService.getSupportedGattServices().indexOf()
-        //lamda z javy 8 sie nada ? -----> list.stream().anyMatch(dto -> dto.getId() == id);
-
-        // Loops through available GATT Services.
-        for (BluetoothGattService gattService : gattServices) {
-            List<BluetoothGattCharacteristic> gattCharacteristics = gattService.getCharacteristics();
-            // Loops through available Characteristics.
-            for (BluetoothGattCharacteristic gattCharacteristic : gattCharacteristics) {
-                String charName = Characteristic.lookup(gattCharacteristic.getUuid(),"");
-                if(expected == charName)
-                    return  gattCharacteristic;
-            }
-        }
-        return null;
-    }
-
     private final BroadcastReceiver mGattUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
             if (BluetoothLeService.ACTION_GATT_CONNECTED.equals(action)) {
                 mConnected = true;
-                mSectionsPagerAdapter.counterFragment.setButtonStatus(true, "START");
-                //updateConnectionState(R.string.connected);
-                invalidateOptionsMenu();
+                mSectionsPagerAdapter.counterFragment.setButtonStatus(true, "START", "");
+                //invalidateOptionsMenu();
             } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
                 mConnected = false;
-                mSectionsPagerAdapter.counterFragment.setButtonStatus(false, "Counter disconnected");
-                //updateConnectionState(R.string.disconnected);
-                //clearUI();
+                mSectionsPagerAdapter.counterFragment.setButtonStatus(false, "START" ,"Disconnected");
             } else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
                 // Show all the supported services and characteristics on the user interface.
-                // displayGattServices(mBluetoothLeService.getSupportedGattServices());
 
             } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
                 String speed = intent.getStringExtra("EXTRA_SPEED");
                 String wheelTime = intent.getStringExtra("WHEEL_TIME");
                 Double newDistance = intent.getDoubleExtra("NEW_DISTANCE", 0.0);
-                distance += newDistance;
 
-                displayData(intent.getStringExtra(BluetoothLeService.EXTRA_DATA), speed, wheelTime, distance);
+                displayData(intent.getStringExtra(BluetoothLeService.EXTRA_DATA), speed, wheelTime, newDistance);
             }
+        }
+    };
+
+    private void displayData(String cscData, String speed, String wheelTime, Double newDistance) {
+        if (cscData != null) {
+            mSectionsPagerAdapter.counterFragment.changeText(speed, wheelTime, newDistance);
+            Log.d("CSC Measurement data", cscData);
+        }
+    }
+
+    private void bindUpdateService (Intent intent) {
+        //mDeviceName = intent.getStringExtra("DEVICE_NAME");
+        mDeviceAddress = intent.getStringExtra("DEVICE_ADDRESS");
+
+        Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);
+        mConnected = bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
+    }
+
+    // Code to manage Service lifecycle.
+    private final ServiceConnection mServiceConnection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder service) {
+            mBluetoothLeService = ((BluetoothLeService.LocalBinder) service).getService();
+            if (!mBluetoothLeService.initialize()) {
+                finish();
+            }
+            // Automatically connects to the device upon successful start-up initialization.
+            mBluetoothLeService.connect(mDeviceAddress);
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+            mBluetoothLeService = null;
         }
     };
 
     public void readCharacteristic(BluetoothGattCharacteristic characteristic)
     {
         final int charaProperties = characteristic.getProperties();
-
         if ((charaProperties | BluetoothGattCharacteristic.PROPERTY_READ) > 0) {
             // If there is an active notification on a characteristic, clear
             // it first so it doesn't update the data field on the user interface.
@@ -191,6 +191,14 @@ public class MainActivity extends AppCompatActivity
         if ((charaProperties | BluetoothGattCharacteristic.PROPERTY_NOTIFY) > 0) {
             mNotifyCharacteristic = characteristic;
             mBluetoothLeService.setCharacteristicNotification(characteristic, true);
+        }
+    }
+
+    public void stopNotifications()
+    {
+        if (mNotifyCharacteristic != null) {
+            mBluetoothLeService.setCharacteristicNotification(mNotifyCharacteristic, false);
+            mNotifyCharacteristic = null;
         }
     }
 
@@ -231,32 +239,6 @@ public class MainActivity extends AppCompatActivity
         intentFilter.addAction(BluetoothLeService.ACTION_DATA_AVAILABLE);
         return intentFilter;
     }
-
-    private void displayData(String cscData, String speed, String wheelTime, Double distance) {
-        if (cscData != null) {
-            mSectionsPagerAdapter.counterFragment.changeText(cscData, speed, wheelTime, distance);
-            Log.d("CSC Measurement data", cscData);
-        }
-    }
-
-    // Code to manage Service lifecycle.
-    private final ServiceConnection mServiceConnection = new ServiceConnection() {
-
-        @Override
-        public void onServiceConnected(ComponentName componentName, IBinder service) {
-            mBluetoothLeService = ((BluetoothLeService.LocalBinder) service).getService();
-            if (!mBluetoothLeService.initialize()) {
-                finish();
-            }
-            // Automatically connects to the device upon successful start-up initialization.
-            mBluetoothLeService.connect(mDeviceAddress);
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName componentName) {
-            mBluetoothLeService = null;
-        }
-    };
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -306,6 +288,11 @@ public class MainActivity extends AppCompatActivity
             mapFragment = new MapFragment();
         }
 
+        public String getMap()
+        {
+            return mapFragment.getMapMain();
+        }
+
         @Override
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
@@ -328,4 +315,6 @@ public class MainActivity extends AppCompatActivity
             return tabs[position];
         }
     }
+
+    public boolean isConnectedToDevice() { return mConnected; }
 }

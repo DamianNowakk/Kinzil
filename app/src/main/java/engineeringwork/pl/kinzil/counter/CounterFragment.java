@@ -13,10 +13,14 @@ import android.widget.TextView;
 
 import com.movisens.smartgattlib.Characteristic;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
 import engineeringwork.pl.kinzil.R;
 import engineeringwork.pl.kinzil.activity.MainActivity;
+import engineeringwork.pl.kinzil.containers.DatabaseHelper;
+import engineeringwork.pl.kinzil.containers.Trip;
 
 public class CounterFragment extends Fragment {
     View view;
@@ -25,7 +29,14 @@ public class CounterFragment extends Fragment {
     long elapsedMinutes;
     long elapsedSeconds;
     double maxSpeed;
+    double averageSpeed;
+    double distance;
+    int calories;
+    String time;
+    String date;
     boolean isTripStarted;
+    DatabaseHelper db;
+    TextView averageSpeedTextView, maxSpeedTextView, distanceTextView, speedTextView, timeTextView;
 
     @Nullable
     @Override
@@ -33,44 +44,68 @@ public class CounterFragment extends Fragment {
         view = inflater.inflate(R.layout.counter_fragment, container, false);
 
         addListeners(view);
+        db = DatabaseHelper.getInstance(getActivity());
+        distanceTextView = (TextView) view.findViewById(R.id.result1);
+        timeTextView = (TextView) view.findViewById(R.id.result2);
+        averageSpeedTextView = (TextView) view.findViewById(R.id.result3);
+        maxSpeedTextView = (TextView) view.findViewById(R.id.result4);
+        speedTextView = (TextView) view.findViewById(R.id.result6);
         maxSpeed = 0;
 
         return view;
     }
 
-    public void setButtonStatus (boolean state, String buttonText) {
+    public void setButtonStatus (boolean state, String buttonText, String stateMessage) {
         final Button button = (Button) view.findViewById(R.id.startTrip);
         button.setEnabled(state);
         button.setText(buttonText);
+        TextView stateView = (TextView) view.findViewById(R.id.StateView);
+        stateView.setText(stateMessage);
     }
 
     private void addListeners(View view) {
         final Button button = (Button) view.findViewById(R.id.startTrip);
         button.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
-                //clearUI
                 if(!isTripStarted) {
                     startTrip();
                     button.setText("STOP");
                     isTripStarted = true;
                 }
                 else {
-                    //TODO stop reading
+                    stopTrip();
                     button.setText("START");
                     isTripStarted = false;
                 }
             }
         });
 
-        setButtonStatus(false, "Counter not connected");
+        setButtonStatus(false, "START" ,"Not connected");
+    }
+
+    private  void stopTrip() {
+        ((MainActivity)getActivity()).stopNotifications();
+        String map = ((MainActivity)getActivity()).getmSectionsPagerAdapter().getMap();
+        String  login = ((MainActivity)getActivity()).getLogin();
+        Trip newTrip = new Trip(20, login, maxSpeed, averageSpeed, distance/1000, 0, time, date, map);
+        db.tripInsert(newTrip);
     }
 
     private void startTrip() {
-        BluetoothGattCharacteristic cscMeasurementChar = ((MainActivity)getActivity()).getCharacteristic(Characteristic.CSC_MEASUREMENT);
-        if (cscMeasurementChar != null) {
+        BluetoothGattCharacteristic cscMeasurementChar = ((MainActivity)getActivity()).getmBluetoothLeService().getCharacteristic(Characteristic.CSC_MEASUREMENT);
+        boolean isConnected = ((MainActivity)getActivity()).isConnectedToDevice();
+        if (cscMeasurementChar != null && isConnected) {
             ((MainActivity)getActivity()).readCharacteristic(cscMeasurementChar);
         }
+        else {
+            setButtonStatus(false, "START" ,"Disconnected");
+        }
 
+        calories = 0;
+        maxSpeed = 0;
+        averageSpeed = 0;
+        distance = 0;
+        date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
         startTime = System.currentTimeMillis();
     }
 
@@ -79,8 +114,6 @@ public class CounterFragment extends Fragment {
     }
 
     private void updateTimeTextView() {
-        TextView timeTextView = (TextView) view.findViewById(R.id.result2);
-
         long secondsInMilli = 1000;
         long minutesInMilli = secondsInMilli * 60;
         long hoursInMilli = minutesInMilli * 60;
@@ -92,37 +125,32 @@ public class CounterFragment extends Fragment {
         different = different % minutesInMilli;
         elapsedSeconds = different / secondsInMilli;
 
-        timeTextView.setText(String.valueOf(elapsedHours) + " h " + String.valueOf(elapsedMinutes) + " m " + String.valueOf(elapsedSeconds) + " s");
+        time = String.valueOf(elapsedHours) + "h " + String.valueOf(elapsedMinutes) + "m " + String.valueOf(elapsedSeconds) + "s";
+        timeTextView.setText(time);
     }
 
-    public void changeText(String cscData, String speedString, String wheelTime, Double distance){
+    public void changeText(String speedString, String wheelTime, Double newDistance){
         updateTimeTextView();
 
-        TextView textView = (TextView) view.findViewById(R.id.textView2);
-        textView.setText(cscData);
-
-        TextView speedTextView = (TextView) view.findViewById(R.id.result6);
         double speed = Double.parseDouble(speedString);
         if(speed > maxSpeed)
             maxSpeed = speed;
         String speedShort = String.format("%.2f", speed);
         speedTextView.setText(speedShort + " km/h");
 
-        TextView distanceTextView = (TextView) view.findViewById(R.id.result1);
+        distance += newDistance;
         String distanceString = String.format("%.2f", distance/1000);
         distanceTextView.setText(distanceString + " km");
 
-        TextView maxSpeedTextView = (TextView) view.findViewById(R.id.result4);
         String maxSpeedShort = String.format("%.2f", maxSpeed);
         maxSpeedTextView.setText(maxSpeedShort + "km/h");
 
-        TextView averageSpeedTextView = (TextView) view.findViewById(R.id.result3);
         double hoursInMilli = 3600000;
         double totalTime = (double)countTimeElapsed()/hoursInMilli;
-        double averageSpeed = (distance/1000)/totalTime;
+        averageSpeed = (distance/1000)/totalTime;
         String averageSpeedString = String.format("%.2f", averageSpeed);
         averageSpeedTextView.setText(averageSpeedString + "km/h");
 
-        //liczenie kalorii
+        //TODO liczenie kalorii
     }
 }

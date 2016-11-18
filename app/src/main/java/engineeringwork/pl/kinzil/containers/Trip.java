@@ -3,9 +3,9 @@ package engineeringwork.pl.kinzil.containers;
 public class Trip {
     private int id;
     private String login;
-    private float maxSpeed;
-    private float avgSpeed;
-    private float distance;
+    private double maxSpeed;
+    private double avgSpeed;
+    private double distance;
     private int calories;
     private String time;
     private String date;
@@ -27,7 +27,7 @@ public class Trip {
         this.login = login;
     }
 
-    public float getMaxSpeed() {
+    public double getMaxSpeed() {
         return maxSpeed;
     }
 
@@ -35,7 +35,7 @@ public class Trip {
         this.maxSpeed = maxSpeed;
     }
 
-    public float getDistance() {
+    public double getDistance() {
         return distance;
     }
 
@@ -43,7 +43,7 @@ public class Trip {
         this.distance = distance;
     }
 
-    public float getAvgSpeed() {
+    public double getAvgSpeed() {
         return avgSpeed;
     }
 
@@ -83,8 +83,8 @@ public class Trip {
         this.map = map;
     }
 
-    public Trip(int id, String login, float maxSpeed, float avgSpeed,
-                float distance, int calories, String time, String date, String map)
+    public Trip(int id, String login, double maxSpeed, double avgSpeed,
+                double distance, int calories, String time, String date, String map)
     {
         this.id = id;
         this.login = login;

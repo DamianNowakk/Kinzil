@@ -319,4 +319,22 @@ public class BluetoothLeService extends Service {
 
         return mBluetoothGatt.getServices();
     }
+
+    //może jest jakaś wbudowana funkcja getCharacteristic ????
+    public BluetoothGattCharacteristic getCharacteristic(UUID characteristicUUID){
+        List<BluetoothGattService> gattServices = getSupportedGattServices();
+        String expected = Characteristic.lookup(characteristicUUID, "");
+
+        // Loops through available GATT Services.
+        for (BluetoothGattService gattService : gattServices) {
+            List<BluetoothGattCharacteristic> gattCharacteristics = gattService.getCharacteristics();
+            // Loops through available Characteristics.
+            for (BluetoothGattCharacteristic gattCharacteristic : gattCharacteristics) {
+                String charName = Characteristic.lookup(gattCharacteristic.getUuid(),"");
+                if(expected == charName)
+                    return  gattCharacteristic;
+            }
+        }
+        return null;
+    }
 }

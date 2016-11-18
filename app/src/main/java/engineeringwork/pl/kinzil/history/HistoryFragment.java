@@ -97,7 +97,7 @@ public class HistoryFragment extends ListFragment implements AdapterView.OnItemC
     }
 
     private void getDataFromDataBase(){
-        //databaseHelper.tripInsert(new Trip(1,login,20.0f,21.0f,22.0f,11,"6h30m","11-11-2016","hahaniewiemjak"));
+        databaseHelper.tripInsert(new Trip(1,login,20.0f,21.0f,22.0f,11,"6h30m","11-11-2016","hahaniewiemjak"));
         trips.addAll(databaseHelper.getTrip(login));
     }
 
