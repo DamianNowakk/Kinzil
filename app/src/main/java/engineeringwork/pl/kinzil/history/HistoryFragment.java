@@ -121,7 +121,7 @@ public class HistoryFragment extends ListFragment implements
         FragmentManager manager = getFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
         SupportMapFragment fragment = new SupportMapFragment();
-        transaction.replace(R.id.mapView, fragment);
+        transaction.replace(R.id.mapView2, fragment);
         transaction.commit();
         fragment.getMapAsync(this);
 
