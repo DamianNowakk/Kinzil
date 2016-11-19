@@ -97,7 +97,7 @@ public class HistoryFragment extends ListFragment implements
         duration.setText(String.valueOf(trip.getTime()));
         time.setImageResource(R.mipmap.ic_time_icon);
 
-        //TODO: zamula i trzeba nalozyc trase.
+        //TODO: nalozyc trase
         FragmentManager manager = getFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
         SupportMapFragment fragment = new SupportMapFragment();
@@ -132,13 +132,13 @@ public class HistoryFragment extends ListFragment implements
 
     @Override
     public boolean onItemLongClick(AdapterView<?> adapterView, View view, final int position, long l) {
-        Trip trip = trips.get(position);
         new AlertDialog.Builder(getContext())
                 .setTitle("Usuwanie")
-                .setMessage("Czy napewno chcesz usunąć tę jazdę?")
+                .setMessage("Czy napewno chcesz usunąć tę wycieczke?")
                 .setPositiveButton("tak", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+                        databaseHelper.deleteTrip(trips.get(position).getId());
                         trips.remove(position);
                         adapter.notifyDataSetChanged();
                     }
@@ -193,6 +193,7 @@ public class HistoryFragment extends ListFragment implements
     @Override
     public boolean onMenuItemClick(MenuItem menuItem) {
         if(menuItem.getTitle().toString().equalsIgnoreCase("Usuń wszystkie wycieczki")){
+            databaseHelper.deleteAllTrips();
             trips.clear();
             adapter.notifyDataSetChanged();
             return true;
