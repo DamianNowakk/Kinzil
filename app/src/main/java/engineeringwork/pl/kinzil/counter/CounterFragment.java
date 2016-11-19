@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.movisens.smartgattlib.Characteristic;
 
@@ -89,6 +90,7 @@ public class CounterFragment extends Fragment {
         String  login = ((MainActivity)getActivity()).getLogin();
         Trip newTrip = new Trip(20, login, maxSpeed, averageSpeed, distance/1000, 0, time, date, map);
         db.tripInsert(newTrip);
+        Toast.makeText((MainActivity)getActivity(), "Trip saved", Toast.LENGTH_LONG).show();
     }
 
     private void startTrip() {

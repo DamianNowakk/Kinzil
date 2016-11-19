@@ -61,7 +61,6 @@ public class MainActivity extends AppCompatActivity
     private String mDeviceAddress;
     private BluetoothGattCharacteristic mNotifyCharacteristic;
     private boolean mConnected = false;
-    private double distance;
 
     public String getLogin() {
         return login;
@@ -227,7 +226,9 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unbindService(mServiceConnection);
+        if(mConnected){
+            unbindService(mServiceConnection);
+        }
         mBluetoothLeService = null;
     }
 
