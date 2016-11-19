@@ -1,5 +1,7 @@
 package engineeringwork.pl.kinzil.history;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,6 +12,9 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -35,13 +40,15 @@ import engineeringwork.pl.kinzil.containers.Trip;
 import engineeringwork.pl.kinzil.containers.TripArrayAdapter;
 import engineeringwork.pl.kinzil.containers.ViewAnimations;
 
-public class HistoryFragment extends ListFragment implements AdapterView.OnItemClickListener, MainActivity.Callbacks, OnMapReadyCallback {
+public class HistoryFragment extends ListFragment implements
+        AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener, MenuItem.OnMenuItemClickListener, MainActivity.Callbacks, OnMapReadyCallback {
     View view;
 
     private String login;
     private Boolean isDetailsViewVisible = false;
 
     private ArrayList<Trip> trips = new ArrayList<>();
+    private ArrayAdapter<Trip> adapter;
     private DrawerLayout drawer;
     private View detailsView;
     private DatabaseHelper databaseHelper;
@@ -52,10 +59,10 @@ public class HistoryFragment extends ListFragment implements AdapterView.OnItemC
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.history_fragment, container, false);
         detailsView  = view.findViewById(R.id.details);
+        setHasOptionsMenu(true);
 
         drawer = ((DrawerLayout)((MainActivity)getActivity()).findViewById(R.id.drawer_layout));
         databaseHelper = DatabaseHelper.getInstance(getContext());
-        databaseHelper.deleteDatabase();
         login = ((MainActivity)getActivity()).getLogin();
 
         getDataFromDataBase();
@@ -65,9 +72,10 @@ public class HistoryFragment extends ListFragment implements AdapterView.OnItemC
     @Override
     public void onActivityCreated(Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
-        ArrayAdapter<Trip> adapter = new TripArrayAdapter(getActivity(), 0, trips);
+        adapter = new TripArrayAdapter(getActivity(), 0, trips);
         setListAdapter(adapter);
         getListView().setOnItemClickListener(this);
+        getListView().setOnItemLongClickListener(this);
     }
 
     private void populateDetailsView(Trip trip) {
@@ -122,16 +130,37 @@ public class HistoryFragment extends ListFragment implements AdapterView.OnItemC
         isDetailsViewVisible = true;
     }
 
+    @Override
+    public boolean onItemLongClick(AdapterView<?> adapterView, View view, final int position, long l) {
+        Trip trip = trips.get(position);
+        new AlertDialog.Builder(getContext())
+                .setTitle("Usuwanie")
+                .setMessage("Czy napewno chcesz usunąć tę jazdę?")
+                .setPositiveButton("tak", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        trips.remove(position);
+                        adapter.notifyDataSetChanged();
+                    }
+                })
+                .setNegativeButton("nie", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        return;
+                    }
+                })
+                .show();
+        return true;
+    }
+
     //TODO: wrocic do tabview przy kliknieciu
     @Override
     public void onBackPressedCallBack() {
         if(drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        }else if(isDetailsViewVisible){
+        }else if(isDetailsViewVisible) {
             ViewAnimations.collapse(detailsView);
             isDetailsViewVisible = false;
-        }else{
-            getFragmentManager().popBackStack();
         }
     }
 
@@ -155,4 +184,20 @@ public class HistoryFragment extends ListFragment implements AdapterView.OnItemC
         mMap.getUiSettings().setRotateGesturesEnabled(false);
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
+        MenuItem deleteDataBase = menu.add("Usuń wszytkie wycieczki");
+        deleteDataBase.setOnMenuItemClickListener(this);
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem menuItem) {
+        if(menuItem.getTitle().toString().equalsIgnoreCase("Usuń wszystkie wycieczki")){
+            trips.clear();
+            adapter.notifyDataSetChanged();
+            databaseHelper.deleteDatabase();
+            return true;
+        }
+        return false;
+    }
 }
