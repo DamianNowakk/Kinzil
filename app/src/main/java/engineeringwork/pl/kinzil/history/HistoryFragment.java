@@ -186,7 +186,7 @@ public class HistoryFragment extends ListFragment implements
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
-        MenuItem deleteDataBase = menu.add("Usuń wszytkie wycieczki");
+        MenuItem deleteDataBase = menu.add("Usuń wszystkie wycieczki");
         deleteDataBase.setOnMenuItemClickListener(this);
     }
 
@@ -195,7 +195,6 @@ public class HistoryFragment extends ListFragment implements
         if(menuItem.getTitle().toString().equalsIgnoreCase("Usuń wszystkie wycieczki")){
             trips.clear();
             adapter.notifyDataSetChanged();
-            databaseHelper.deleteDatabase();
             return true;
         }
         return false;
