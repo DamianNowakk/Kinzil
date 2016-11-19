@@ -55,7 +55,6 @@ public class HistoryFragment extends ListFragment implements AdapterView.OnItemC
 
         drawer = ((DrawerLayout)((MainActivity)getActivity()).findViewById(R.id.drawer_layout));
         databaseHelper = DatabaseHelper.getInstance(getContext());
-        databaseHelper.deleteDatabase();
         login = ((MainActivity)getActivity()).getLogin();
 
         getDataFromDataBase();

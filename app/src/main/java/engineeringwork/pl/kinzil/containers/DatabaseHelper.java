@@ -323,5 +323,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return tripList;
     }
 
+    public boolean deleteTrip(int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        long result = db.delete(TABLE_TRIP, "ID = ?", new String[]{Integer.toString(id)});
+        return result != -1;
+    }
+
+    public void deleteAllTrips() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("delete from "+ TABLE_TRIP);
+    }
+
 
 }
