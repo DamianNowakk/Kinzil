@@ -252,7 +252,6 @@ public class MainActivity extends AppCompatActivity
         frameLayout.setVisibility(View.VISIBLE);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
-
         if (id == R.id.nav_connection) {
             fragmentManager.beginTransaction().replace(R.id.fragment_layout, new BluetoothFragment()).commit();
         } else if (id == R.id.nav_settings) {

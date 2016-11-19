@@ -16,9 +16,11 @@ import android.view.animation.Animation;
 import android.view.animation.Transformation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -37,6 +39,7 @@ public class HistoryFragment extends ListFragment implements AdapterView.OnItemC
     View view;
 
     private String login;
+    private Boolean isDetailsViewVisible = false;
 
     private ArrayList<Trip> trips = new ArrayList<>();
     private DrawerLayout drawer;
@@ -52,10 +55,10 @@ public class HistoryFragment extends ListFragment implements AdapterView.OnItemC
 
         drawer = ((DrawerLayout)((MainActivity)getActivity()).findViewById(R.id.drawer_layout));
         databaseHelper = DatabaseHelper.getInstance(getContext());
+        databaseHelper.deleteDatabase();
         login = ((MainActivity)getActivity()).getLogin();
 
         getDataFromDataBase();
-
         return view;
     }
 
@@ -94,17 +97,29 @@ public class HistoryFragment extends ListFragment implements AdapterView.OnItemC
         transaction.commit();
         fragment.getMapAsync(this);
 
+        final Button button = (Button) detailsView.findViewById(R.id.routeOverlay);
+        button.setOnClickListener(new View.OnClickListener(){
+            //TODO logika tego czegos
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getContext(), "Wcislem guzik", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void getDataFromDataBase(){
         databaseHelper.tripInsert(new Trip(1,login,20.0f,21.0f,22.0f,11,"6h30m","11-11-2016","hahaniewiemjak"));
-        trips.addAll(databaseHelper.getTrip(login));
+        ArrayList<Trip> tripsToAdd = databaseHelper.getTrip(login);
+        if(tripsToAdd != null){
+            trips.addAll(tripsToAdd);
+        }
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
         populateDetailsView(trips.get(position));
         ViewAnimations.expand(detailsView, view.getHeight());
+        isDetailsViewVisible = true;
     }
 
     //TODO: wrocic do tabview przy kliknieciu
@@ -112,8 +127,11 @@ public class HistoryFragment extends ListFragment implements AdapterView.OnItemC
     public void onBackPressedCallBack() {
         if(drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        }else{
+        }else if(isDetailsViewVisible){
             ViewAnimations.collapse(detailsView);
+            isDetailsViewVisible = false;
+        }else{
+            getFragmentManager().popBackStack();
         }
     }
 
