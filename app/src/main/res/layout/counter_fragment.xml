@@ -3,19 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent" android:layout_height="match_parent">
 
-    <TextView
-        android:text="Dane z licznika"
-        android:layout_width="match_parent"
-        android:id="@+id/textView2"
-        android:textAlignment="center"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:textSize="20sp"
-        android:layout_height="120dp" />
-
     <TableLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:stretchColumns="*"
         android:layout_marginLeft="0dp"
         android:layout_alignParentTop="true"
@@ -33,47 +23,7 @@
                 <ImageView
                     android:layout_width="50dp"
                     android:layout_height="match_parent"
-                    android:src="@mipmap/ic_launcher"
-                    android:id="@+id/counterImageView1" />
-
-                <LinearLayout
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp">
-
-                    <TextView
-                        android:text="@string/result1"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textSize="18sp"
-                        android:id="@+id/resultLabel1"
-                        android:textAlignment="textStart"
-                        android:layout_weight="1"
-                        android:layout_marginTop="8dp" />
-
-                    <TextView
-                        android:text="0 km"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/result1"
-                        android:textSize="24sp"
-                        android:textAlignment="textStart"
-                        android:layout_marginBottom="4dp" />
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <ImageView
-                    android:layout_width="50dp"
-                    android:layout_height="match_parent"
-                    android:src="@mipmap/ic_launcher"
+                    android:src="@mipmap/ic_hourglass"
                     android:id="@+id/counterImageView2" />
 
                 <LinearLayout
@@ -104,6 +54,96 @@
                 </LinearLayout>
 
             </LinearLayout>
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent"
+                    android:src="@mipmap/ic_path"
+                    android:id="@+id/counterImageView1" />
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp">
+
+                    <TextView
+                        android:text="@string/result1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="18sp"
+                        android:id="@+id/resultLabel1"
+                        android:textAlignment="textStart"
+                        android:layout_weight="1"
+                        android:layout_marginTop="8dp" />
+
+                    <TextView
+                        android:text="0 km"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/result1"
+                        android:textSize="24sp"
+                        android:textAlignment="textStart"
+                        android:layout_marginBottom="4dp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent"
+                    android:src="@mipmap/ic_speed"
+                    android:id="@+id/counterImageView6" />
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp">
+
+                    <TextView
+                        android:text="@string/result6"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="18sp"
+                        android:id="@+id/resultLabel6"
+                        android:textAlignment="textStart"
+                        android:layout_weight="1"
+                        android:layout_marginTop="8dp" />
+
+                    <TextView
+                        android:text="0 km/h"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/result6"
+                        android:textSize="24sp"
+                        android:textAlignment="textStart"
+                        android:layout_marginBottom="4dp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
 
         </TableRow>
 
@@ -119,47 +159,7 @@
                 <ImageView
                     android:layout_width="50dp"
                     android:layout_height="match_parent"
-                    android:src="@mipmap/ic_launcher"
-                    android:id="@+id/counterImageView3" />
-
-                <LinearLayout
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp">
-
-                    <TextView
-                        android:text="@string/result3"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textSize="18sp"
-                        android:id="@+id/resultLabel3"
-                        android:textAlignment="textStart"
-                        android:layout_weight="1"
-                        android:layout_marginTop="8dp" />
-
-                    <TextView
-                        android:text="0 km/h"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/result3"
-                        android:textSize="24sp"
-                        android:textAlignment="textStart"
-                        android:layout_marginBottom="4dp" />
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <ImageView
-                    android:layout_width="50dp"
-                    android:layout_height="match_parent"
-                    android:src="@mipmap/ic_launcher"
+                    android:src="@mipmap/ic_maxspeed"
                     android:id="@+id/counterImageView4" />
 
                 <LinearLayout
@@ -205,7 +205,52 @@
                 <ImageView
                     android:layout_width="50dp"
                     android:layout_height="match_parent"
-                    android:src="@mipmap/ic_launcher"
+                    android:src="@mipmap/ic_avg_speed"
+                    android:id="@+id/counterImageView3" />
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp">
+
+                    <TextView
+                        android:text="@string/result3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="18sp"
+                        android:id="@+id/resultLabel3"
+                        android:textAlignment="textStart"
+                        android:layout_weight="1"
+                        android:layout_marginTop="8dp" />
+
+                    <TextView
+                        android:text="0 km/h"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/result3"
+                        android:textSize="24sp"
+                        android:textAlignment="textStart"
+                        android:layout_marginBottom="4dp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent"
+                    android:src="@mipmap/ic_flame"
                     android:id="@+id/counterImageView5" />
 
                 <LinearLayout
@@ -225,50 +270,10 @@
                         android:layout_marginTop="8dp" />
 
                     <TextView
-                        android:text="0"
+                        android:text="0 kcal"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/result5"
-                        android:textSize="24sp"
-                        android:textAlignment="textStart"
-                        android:layout_marginBottom="4dp" />
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <ImageView
-                    android:layout_width="50dp"
-                    android:layout_height="match_parent"
-                    android:src="@mipmap/ic_launcher"
-                    android:id="@+id/counterImageView6" />
-
-                <LinearLayout
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp">
-
-                    <TextView
-                        android:text="@string/result6"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textSize="18sp"
-                        android:id="@+id/resultLabel6"
-                        android:textAlignment="textStart"
-                        android:layout_weight="1"
-                        android:layout_marginTop="8dp" />
-
-                    <TextView
-                        android:text="0 km/h"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/result6"
                         android:textSize="24sp"
                         android:textAlignment="textStart"
                         android:layout_marginBottom="4dp" />
@@ -280,17 +285,22 @@
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent" >
 
             <Button
                 android:text="START"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/startTrip" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:id="@+id/StateView" />
         </TableRow>
 

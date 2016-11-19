@@ -37,6 +37,14 @@ public class CscAnalyser {
         prevMeasurement = currMeasurement;
     }
 
+    public void reset(){
+        prevMeasurement = null;
+        mSpeed = 0;
+        speedKmH = 0;
+        newDistance = 0;
+        mCadence = 0;
+    }
+
     public void setWheelSize(double size){
         mWheelSize = size;
     }

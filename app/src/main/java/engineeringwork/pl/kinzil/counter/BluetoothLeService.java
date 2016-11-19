@@ -156,6 +156,10 @@ public class BluetoothLeService extends Service {
         sendBroadcast(intent);
     }
 
+    public void reset() {
+        mCscAnalyser.reset();
+    }
+
     public class LocalBinder extends Binder {
         public BluetoothLeService getService() {
             return BluetoothLeService.this;

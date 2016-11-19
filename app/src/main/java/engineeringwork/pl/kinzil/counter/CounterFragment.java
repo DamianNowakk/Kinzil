@@ -103,6 +103,7 @@ public class CounterFragment extends Fragment {
             setButtonStatus(false, "START" ,"Disconnected");
         }
 
+        ((MainActivity)getActivity()).getmBluetoothLeService().reset();
         calories = 0;
         maxSpeed = 0;
         averageSpeed = 0;
@@ -127,7 +128,7 @@ public class CounterFragment extends Fragment {
         different = different % minutesInMilli;
         elapsedSeconds = different / secondsInMilli;
 
-        time = String.valueOf(elapsedHours) + "h " + String.valueOf(elapsedMinutes) + "m " + String.valueOf(elapsedSeconds) + "s";
+        time = String.valueOf(elapsedHours) + " h " + String.valueOf(elapsedMinutes) + " m " + String.valueOf(elapsedSeconds) + " s";
         timeTextView.setText(time);
     }
 
@@ -145,13 +146,13 @@ public class CounterFragment extends Fragment {
         distanceTextView.setText(distanceString + " km");
 
         String maxSpeedShort = String.format("%.2f", maxSpeed);
-        maxSpeedTextView.setText(maxSpeedShort + "km/h");
+        maxSpeedTextView.setText(maxSpeedShort + " km/h");
 
         double hoursInMilli = 3600000;
         double totalTime = (double)countTimeElapsed()/hoursInMilli;
         averageSpeed = (distance/1000)/totalTime;
         String averageSpeedString = String.format("%.2f", averageSpeed);
-        averageSpeedTextView.setText(averageSpeedString + "km/h");
+        averageSpeedTextView.setText(averageSpeedString + " km/h");
 
         //TODO liczenie kalorii
     }
