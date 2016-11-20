@@ -30,6 +30,9 @@ import android.widget.FrameLayout;
 
 import com.google.android.gms.cast.CastRemoteDisplayLocalService;
 import com.movisens.smartgattlib.Characteristic;
+
+import org.json.JSONException;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -103,10 +106,17 @@ public class MainActivity extends AppCompatActivity
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if(historyFragment != null && historyFragment.isVisible()) {
-            mCallbacks.onBackPressedCallBack();
-        }else if (drawer.isDrawerOpen(GravityCompat.START)) {
+            if(!historyFragment.getIsDetailsViewVisible()) {
+                mCallbacks.onBackPressedCallBack();
+                historyFragment.deleteMenu();
+            } else {
+                mCallbacks.onBackPressedCallBack();
+                return;
+            }
+        }
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else if(mViewPager.getVisibility() == View.GONE && tabLayout.getVisibility() == View.GONE) {
+        } else if(mViewPager.getVisibility() == View.INVISIBLE && tabLayout.getVisibility() == View.GONE) {
             tabLayout.setVisibility(View.VISIBLE);
             mViewPager.setVisibility(View.VISIBLE);
             frameLayout.setVisibility(View.GONE);
@@ -248,11 +258,10 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         tabLayout.setVisibility(View.GONE);
-        mViewPager.setVisibility(View.GONE);
+        mViewPager.setVisibility(View.INVISIBLE);
         frameLayout.setVisibility(View.VISIBLE);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
-
         if (id == R.id.nav_connection) {
             fragmentManager.beginTransaction().replace(R.id.fragment_layout, new BluetoothFragment()).commit();
         } else if (id == R.id.nav_settings) {
@@ -292,6 +301,15 @@ public class MainActivity extends AppCompatActivity
         public String getMap()
         {
             return mapFragment.getMapMain();
+        }
+
+        public void setMapSecondary(String map)
+        {
+            try {
+                mapFragment.setMapSecondary(map);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
 
         @Override

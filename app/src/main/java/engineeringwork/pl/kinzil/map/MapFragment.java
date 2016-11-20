@@ -80,6 +80,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             loc.setLatitude( Double.parseDouble(latitude));
             locationArrayListSecondary.add(loc);
         }
+        setMap();
     }
 
     @Override
@@ -145,6 +146,16 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         mMap.getUiSettings().setRotateGesturesEnabled(false);
         setMap();
 
+    }
+
+    public void refresh()
+    {
+        FragmentManager manager = getFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        SupportMapFragment fragment = new SupportMapFragment();
+        transaction.replace(R.id.mapView, fragment);
+        transaction.commit();
+        fragment.getMapAsync(this);
     }
 
     private void setMap()
