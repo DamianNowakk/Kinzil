@@ -128,7 +128,7 @@ public class CounterFragment extends Fragment {
         different = different % minutesInMilli;
         elapsedSeconds = different / secondsInMilli;
 
-        time = String.valueOf(elapsedHours) + " h " + String.valueOf(elapsedMinutes) + " m " + String.valueOf(elapsedSeconds) + " s";
+        time = String.valueOf(elapsedHours) + ":" + String.valueOf(elapsedMinutes) + ":" + String.valueOf(elapsedSeconds);
         timeTextView.setText(time);
     }
 
@@ -139,20 +139,20 @@ public class CounterFragment extends Fragment {
         if(speed > maxSpeed)
             maxSpeed = speed;
         String speedShort = String.format("%.2f", speed);
-        speedTextView.setText(speedShort + " km/h");
+        speedTextView.setText(speedShort);
 
         distance += newDistance;
         String distanceString = String.format("%.2f", distance/1000);
-        distanceTextView.setText(distanceString + " km");
+        distanceTextView.setText(distanceString);
 
         String maxSpeedShort = String.format("%.2f", maxSpeed);
-        maxSpeedTextView.setText(maxSpeedShort + " km/h");
+        maxSpeedTextView.setText(maxSpeedShort);
 
         double hoursInMilli = 3600000;
         double totalTime = (double)countTimeElapsed()/hoursInMilli;
         averageSpeed = (distance/1000)/totalTime;
         String averageSpeedString = String.format("%.2f", averageSpeed);
-        averageSpeedTextView.setText(averageSpeedString + " km/h");
+        averageSpeedTextView.setText(averageSpeedString);
 
         //TODO liczenie kalorii
     }
