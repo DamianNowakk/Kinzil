@@ -39,6 +39,7 @@ import java.util.UUID;
 
 import engineeringwork.pl.kinzil.R;
 import engineeringwork.pl.kinzil.bluetooth.BluetoothFragment;
+import engineeringwork.pl.kinzil.containers.DatabaseHelper;
 import engineeringwork.pl.kinzil.counter.BluetoothLeService;
 import engineeringwork.pl.kinzil.counter.CounterFragment;
 import engineeringwork.pl.kinzil.history.HistoryFragment;
@@ -53,6 +54,7 @@ public class MainActivity extends AppCompatActivity
     }
     private Callbacks mCallbacks;
     private HistoryFragment historyFragment;
+    private DatabaseHelper db;
 
     private String login;
     private ViewPager mViewPager;
@@ -63,8 +65,14 @@ public class MainActivity extends AppCompatActivity
     private BluetoothLeService mBluetoothLeService;
     private String mDeviceAddress;
     private BluetoothGattCharacteristic mNotifyCharacteristic;
-    private boolean mConnected = false;
+    private boolean mConnected = false, isStopStarted = false;
+    public static double mWheelSize;
+    public static int userWeight;
 
+    public synchronized static int getUserWeight() { return userWeight; }
+    public synchronized static void setUserWeight(int weight) { userWeight = weight; }
+    public synchronized static double getmWheelSize() { return mWheelSize; }
+    public synchronized static void setmWheelSize(double size) { mWheelSize = size; }
     public String getLogin() {
         return login;
     }
@@ -100,6 +108,10 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        db = DatabaseHelper.getInstance(this);
+        setmWheelSize( 0.7);//db.getFirstLoginSetting(login).getWheelSize());
+        setUserWeight(90);
     }
 
     @Override
@@ -144,6 +156,21 @@ public class MainActivity extends AppCompatActivity
                 String speed = intent.getStringExtra("EXTRA_SPEED");
                 String wheelTime = intent.getStringExtra("WHEEL_TIME");
                 Double newDistance = intent.getDoubleExtra("NEW_DISTANCE", 0.0);
+
+                if(newDistance == 0 && isStopStarted == false)
+                {
+                    mSectionsPagerAdapter.counterFragment.startStopTime();
+                    isStopStarted = true;
+                }
+                else if(newDistance == 0 && isStopStarted == true)
+                {
+
+                }
+                else if(newDistance > 0 && isStopStarted == true)
+                {
+                    mSectionsPagerAdapter.counterFragment.subtractTime();
+                    isStopStarted = false;
+                }
 
                 displayData(intent.getStringExtra(BluetoothLeService.EXTRA_DATA), speed, wheelTime, newDistance);
             }

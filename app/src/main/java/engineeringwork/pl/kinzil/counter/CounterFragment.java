@@ -2,6 +2,7 @@ package engineeringwork.pl.kinzil.counter;
 
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.os.Bundle;
+import android.support.annotation.IntegerRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -25,19 +26,17 @@ import engineeringwork.pl.kinzil.containers.Trip;
 
 public class CounterFragment extends Fragment {
     View view;
-    long startTime;
-    long elapsedHours;
-    long elapsedMinutes;
-    long elapsedSeconds;
+    long startTime, startTimeFilter, stopTime;
     double maxSpeed;
+    double speed;
     double averageSpeed;
     double distance;
     int calories;
     String time;
     String date;
-    boolean isTripStarted;
+    boolean isTripStarted, isTripStopped = false;
     DatabaseHelper db;
-    TextView averageSpeedTextView, maxSpeedTextView, distanceTextView, speedTextView, timeTextView;
+    TextView averageSpeedTextView, maxSpeedTextView, distanceTextView, speedTextView, timeTextView, timeWithStopsTextView, caloriesTextView;
 
     @Nullable
     @Override
@@ -48,9 +47,11 @@ public class CounterFragment extends Fragment {
         db = DatabaseHelper.getInstance(getActivity());
         distanceTextView = (TextView) view.findViewById(R.id.result1);
         timeTextView = (TextView) view.findViewById(R.id.result2);
+        timeWithStopsTextView = (TextView) view.findViewById(R.id.timeWithStops);
         averageSpeedTextView = (TextView) view.findViewById(R.id.result3);
         maxSpeedTextView = (TextView) view.findViewById(R.id.result4);
         speedTextView = (TextView) view.findViewById(R.id.result6);
+        caloriesTextView = (TextView) view.findViewById(R.id.result5);
         maxSpeed = 0;
 
         return view;
@@ -110,50 +111,70 @@ public class CounterFragment extends Fragment {
         distance = 0;
         date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
         startTime = System.currentTimeMillis();
+        startTimeFilter = System.currentTimeMillis();
     }
 
-    private long countTimeElapsed() {
-        return System.currentTimeMillis() - startTime;
+    private long countTimeElapsed(long startTimeLocal) {
+        return System.currentTimeMillis() - startTimeLocal;
     }
 
-    private void updateTimeTextView() {
+    private void updateTimeTextView(long startTimeLocal, TextView textViewToChange) {
         long secondsInMilli = 1000;
         long minutesInMilli = secondsInMilli * 60;
         long hoursInMilli = minutesInMilli * 60;
-        long different = countTimeElapsed();
+        long different = countTimeElapsed(startTimeLocal);
 
-        elapsedHours = different / hoursInMilli;
+        long elapsedHours = different / hoursInMilli;
         different = different % hoursInMilli;
-        elapsedMinutes = different / minutesInMilli;
+        long elapsedMinutes = different / minutesInMilli;
         different = different % minutesInMilli;
-        elapsedSeconds = different / secondsInMilli;
+        long elapsedSeconds = different / secondsInMilli;
 
-        time = String.valueOf(elapsedHours) + ":" + String.valueOf(elapsedMinutes) + ":" + String.valueOf(elapsedSeconds);
-        timeTextView.setText(time);
+        //time = String.format("%02d", elapsedHours) + ":" + String.valueOf(elapsedMinutes) + ":" + String.valueOf(elapsedSeconds);
+        time = String.format("%02d", elapsedHours) + ":" + String.format("%02d", elapsedMinutes) + ":" + String.format("%02d", elapsedSeconds);
+        //SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+        //String time2 = sdf.format(different);
+        textViewToChange.setText(time);
+    }
+
+    public void subtractTime(){
+        startTimeFilter += System.currentTimeMillis() - stopTime;
+        isTripStopped = false;
+    }
+
+    public void startStopTime()
+    {
+        stopTime = System.currentTimeMillis();
+        isTripStopped = true;
     }
 
     public void changeText(String speedString, String wheelTime, Double newDistance){
-        updateTimeTextView();
+        updateTimeTextView(startTime, timeTextView);
+        if(isTripStopped == false)
+            updateTimeTextView(startTimeFilter, timeWithStopsTextView);
 
-        double speed = Double.parseDouble(speedString);
+        speed = Double.parseDouble(speedString);
         if(speed > maxSpeed)
             maxSpeed = speed;
-        String speedShort = String.format("%.2f", speed);
-        speedTextView.setText(speedShort);
+        String speedS = Integer.toString((int)speed);
+        speedTextView.setText(speedS);
 
         distance += newDistance;
         String distanceString = String.format("%.2f", distance/1000);
         distanceTextView.setText(distanceString);
 
-        String maxSpeedShort = String.format("%.2f", maxSpeed);
-        maxSpeedTextView.setText(maxSpeedShort);
+        String maxSpeedString = Integer.toString((int)maxSpeed);
+        maxSpeedTextView.setText(maxSpeedString);
 
         double hoursInMilli = 3600000;
-        double totalTime = (double)countTimeElapsed()/hoursInMilli;
+        double totalTime = (double)countTimeElapsed(startTime)/hoursInMilli;
         averageSpeed = (distance/1000)/totalTime;
-        String averageSpeedString = String.format("%.2f", averageSpeed);
+        //String averageSpeedString = String.format("%.2f", averageSpeed);
+        String averageSpeedString = Integer.toString((int)averageSpeed);
         averageSpeedTextView.setText(averageSpeedString);
 
-        //TODO liczenie kalorii
+        double calories = MainActivity.getUserWeight()  * (double)countTimeElapsed(startTime)/60000.0 * (0.6345* averageSpeed * averageSpeed + 0.7563 * averageSpeed + 36.725)/3600;
+        String caloriesString = Integer.toString((int)calories);
+        caloriesTextView.setText(caloriesString);
     }
 }

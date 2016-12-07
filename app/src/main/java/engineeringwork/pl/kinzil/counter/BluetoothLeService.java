@@ -39,13 +39,14 @@ import com.movisens.smartgattlib.characteristics.BatteryLevel;
 import java.util.List;
 import java.util.UUID;
 
+import engineeringwork.pl.kinzil.containers.DatabaseHelper;
+
 /**
  * Service for managing connection and data communication with a GATT server hosted on a
  * given Bluetooth LE device.
  */
 public class BluetoothLeService extends Service {
     private final static String TAG = BluetoothLeService.class.getSimpleName();
-
     private BluetoothManager mBluetoothManager;
     private BluetoothAdapter mBluetoothAdapter;
     private String mBluetoothDeviceAddress;
@@ -133,16 +134,14 @@ public class BluetoothLeService extends Service {
             intent.putExtra(EXTRA_DATA, "BatteryLevel: " + bl.getBatteryLevel()
                     + "%");
         } else if (Characteristic.CSC_MEASUREMENT.equals(characteristicUuid)){
-            SpeedCadenceMeasurement csc = new SpeedCadenceMeasurement(data);
-            mCscAnalyser.addData(csc);
-            intent.putExtra(EXTRA_DATA, "Wheel Turns: " + csc.cumulativeWheelRevolutions + "\n"
-                    + "Wheel Time: " + csc.lastWheelEventTime + "\n"
-                    + "Speed: " + mCscAnalyser.getSpeed() + "\n"
-                    + "Crank Turns: " + csc.cumulativeCrankRevolutions + "\n"
-                    + "Crank Time: " + csc.lastCrankEventTime + "\n"
-                    + "Cadence: " + mCscAnalyser.getCadence());
+            mCscAnalyser.getData(data);
+            mCscAnalyser.processData();
+
+            intent.putExtra(EXTRA_DATA, "Wheel Turns: " + mCscAnalyser.currCumulativeWheelRevolutions + "\n"
+                    + "Wheel Time: " + mCscAnalyser.currLastWheelEventTime + "\n"
+                    + "Speed: " + mCscAnalyser.getSpeed() + "\n");
             intent.putExtra("EXTRA_SPEED", String.valueOf(mCscAnalyser.getSpeedKmH()));
-            intent.putExtra("WHEEL_TIME", String.valueOf(csc.lastWheelEventTime));
+            //intent.putExtra("WHEEL_TIME", String.valueOf(csc.lastWheelEventTime));
             intent.putExtra("NEW_DISTANCE", mCscAnalyser.getNewDistance());
         }else {
             // For all other profiles, writes the data formatted in HEX.

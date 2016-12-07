@@ -1,64 +1,77 @@
 package engineeringwork.pl.kinzil.counter;
 
-public class CscAnalyser {
-    private double mWheelSize = 0.72d; // Default 700mm
+import com.movisens.smartgattlib.GattByteBuffer;
 
-    private SpeedCadenceMeasurement prevMeasurement;
-    private double mSpeed;
-    private double speedKmH;
-    private double newDistance;
-    private double mCadence;
+import engineeringwork.pl.kinzil.activity.MainActivity;
 
-    public void addData(SpeedCadenceMeasurement currMeasurement) {
-        if(currMeasurement == null) return;
+public class CscAnalyser { //TODO zmiana kodu
+    public Long currCumulativeWheelRevolutions, prevCumulativeWheelRevolutions;
+    public float currLastWheelEventTime, prevLastWheelEventTime;
+    private double speed, speedKmH, newDistance;
+    private int counter = 0;
+    private boolean hasPreviousData = false;
 
-        if(prevMeasurement != null) {
-            double wheelTimeDiff = currMeasurement.lastWheelEventTime - prevMeasurement.lastWheelEventTime;
+    public void getData(byte[] data) {
+        GattByteBuffer bb = GattByteBuffer.wrap(data);
+
+        int flags = bb.getInt8();
+
+        if(hasWheelData(flags)){
+            currCumulativeWheelRevolutions = bb.getUint32();
+            currLastWheelEventTime = (float)bb.getUint16() / 1024.0F;
+        }
+        else {
+            currCumulativeWheelRevolutions = 0L;
+            currLastWheelEventTime = 0;
+        }
+    }
+
+    public void processData() {
+        if(hasPreviousData == true) {
+            double wheelTimeDiff = currLastWheelEventTime - prevLastWheelEventTime;
             if (wheelTimeDiff > 0){
-                long revs = currMeasurement.cumulativeWheelRevolutions - prevMeasurement.cumulativeWheelRevolutions;
-                mSpeed = revs * Math.PI * mWheelSize / wheelTimeDiff;
-                speedKmH = mSpeed * 3.6;
-                newDistance = revs * Math.PI * mWheelSize;
-            }else {
-                mSpeed = speedKmH = newDistance = 0;
-            }
-
-            double crankTimeDiff = currMeasurement.lastCrankEventTime - prevMeasurement.lastCrankEventTime;
-            if (crankTimeDiff > 0){
-                long revs = currMeasurement.cumulativeCrankRevolutions - prevMeasurement.cumulativeCrankRevolutions;
-
-                mCadence = revs * 60d / crankTimeDiff;
+                long revs = currCumulativeWheelRevolutions - prevCumulativeWheelRevolutions;
+                speed = revs * Math.PI * MainActivity.getmWheelSize() / wheelTimeDiff;
+                speedKmH = speed * 3.6;
+                newDistance = revs * Math.PI * MainActivity.getmWheelSize();
             }
             else {
-                mCadence = 0;
+                if(counter == 4) {
+                    counter = 0;
+                    speed = speedKmH = newDistance = 0;
+                }
+                else
+                {
+                    newDistance = 0;
+                    speed = speed/2;
+                    speedKmH = speed * 3.6;
+                    counter++;
+                }
             }
         }
 
-        prevMeasurement = currMeasurement;
+        prevCumulativeWheelRevolutions = currCumulativeWheelRevolutions;
+        prevLastWheelEventTime = currLastWheelEventTime;
+        hasPreviousData = true;
+    }
+
+    private boolean hasWheelData(int flags) {
+        return (flags & 1) != 0;
     }
 
     public void reset(){
-        prevMeasurement = null;
-        mSpeed = 0;
+        hasPreviousData = false;
+        speed = 0;
         speedKmH = 0;
         newDistance = 0;
-        mCadence = 0;
-    }
-
-    public void setWheelSize(double size){
-        mWheelSize = size;
     }
 
     public double getSpeed(){
-        return mSpeed;
+        return speed;
     }
 
     public double getSpeedKmH(){
         return speedKmH;
-    }
-
-    public double getCadence(){
-        return mCadence;
     }
 
     public double getNewDistance () { return newDistance; }

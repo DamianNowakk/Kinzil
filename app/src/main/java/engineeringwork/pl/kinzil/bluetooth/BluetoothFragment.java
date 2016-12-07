@@ -157,12 +157,6 @@ public class BluetoothFragment extends Fragment {
             }
         }
 
-        /*@Override
-        public long getItemId(int position) {
-            String item = getItem(position);
-            return mIdMap.get(item);
-        }*/
-
         @Override
         public boolean hasStableIds() {
             return true;
