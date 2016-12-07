@@ -27,6 +27,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.google.android.gms.cast.CastRemoteDisplayLocalService;
 import com.movisens.smartgattlib.Characteristic;
@@ -145,6 +146,7 @@ public class MainActivity extends AppCompatActivity
             if (BluetoothLeService.ACTION_GATT_CONNECTED.equals(action)) {
                 mConnected = true;
                 mSectionsPagerAdapter.counterFragment.setButtonStatus(true, "START", "");
+                Toast.makeText(MainActivity.this, "Connected to device", Toast.LENGTH_SHORT).show();
                 //invalidateOptionsMenu();
             } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
                 mConnected = false;
