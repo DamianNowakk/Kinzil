@@ -48,7 +48,7 @@ public class CounterFragment extends Fragment {
         distanceTextView = (TextView) view.findViewById(R.id.result1);
         timeTextView = (TextView) view.findViewById(R.id.result2);
         timeWithStopsTextView = (TextView) view.findViewById(R.id.timeWithStops);
-        averageSpeedTextView = (TextView) view.findViewById(R.id.result3);
+        averageSpeedTextView = (TextView) view.findViewById(R.id.result7);
         maxSpeedTextView = (TextView) view.findViewById(R.id.result4);
         speedTextView = (TextView) view.findViewById(R.id.result6);
         caloriesTextView = (TextView) view.findViewById(R.id.result5);
@@ -149,10 +149,6 @@ public class CounterFragment extends Fragment {
     }
 
     public void changeText(String speedString, String wheelTime, Double newDistance){
-        updateTimeTextView(startTime, timeTextView);
-        if(isTripStopped == false)
-            updateTimeTextView(startTimeFilter, timeWithStopsTextView);
-
         speed = Double.parseDouble(speedString);
         if(speed > maxSpeed)
             maxSpeed = speed;
@@ -172,6 +168,18 @@ public class CounterFragment extends Fragment {
         //String averageSpeedString = String.format("%.2f", averageSpeed);
         String averageSpeedString = Integer.toString((int)averageSpeed);
         averageSpeedTextView.setText(averageSpeedString);
+
+        updateTimeTextView(startTime, timeTextView);
+        if(isTripStopped == false)
+        {
+            updateTimeTextView(startTimeFilter, timeWithStopsTextView);
+
+            double totalTimeNoStops = (double)countTimeElapsed(startTimeFilter)/hoursInMilli;
+            double averageSpeedNoStops = (distance/1000)/totalTimeNoStops;
+            String averageSpeedStringNoStops = Integer.toString((int)averageSpeedNoStops);
+            TextView averageSpeedNoStopsTextView = (TextView) view.findViewById(R.id.result3);
+            averageSpeedNoStopsTextView.setText(averageSpeedStringNoStops);
+        }
 
         double calories = MainActivity.getUserWeight()  * (double)countTimeElapsed(startTime)/60000.0 * (0.6345* averageSpeed * averageSpeed + 0.7563 * averageSpeed + 36.725)/3600;
         String caloriesString = Integer.toString((int)calories);
