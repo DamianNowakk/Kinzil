@@ -45,7 +45,7 @@ public class SettingsFragment extends Fragment {
 
         setting = db.getFirstLoginSetting(((MainActivity)getActivity()).getLogin());
         if(setting == null)
-            setting = new Setting(((MainActivity)getActivity()).getLogin(), 0, 0);
+            setting = new Setting(((MainActivity)getActivity()).getLogin(), 1800, 80);
 
         setData();
         return view;
@@ -65,7 +65,9 @@ public class SettingsFragment extends Fragment {
         Button btnLogin = (Button) login.findViewById(R.id.btn_create);
         Button btnCancel = (Button) login.findViewById(R.id.btn_cancel);
         final EditText txtWheelSize = (EditText)login.findViewById(R.id.txt_wheel_size);
+        txtWheelSize.setText(setting.getWheelSize());
         final EditText txtWeight = (EditText)login.findViewById(R.id.txt_weight);
+        txtWeight.setText(setting.getWeight());
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

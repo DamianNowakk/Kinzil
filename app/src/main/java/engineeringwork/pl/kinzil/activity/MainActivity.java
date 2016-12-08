@@ -41,6 +41,7 @@ import java.util.UUID;
 import engineeringwork.pl.kinzil.R;
 import engineeringwork.pl.kinzil.bluetooth.BluetoothFragment;
 import engineeringwork.pl.kinzil.containers.DatabaseHelper;
+import engineeringwork.pl.kinzil.containers.Setting;
 import engineeringwork.pl.kinzil.counter.BluetoothLeService;
 import engineeringwork.pl.kinzil.counter.CounterFragment;
 import engineeringwork.pl.kinzil.history.HistoryFragment;
@@ -111,8 +112,15 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         db = DatabaseHelper.getInstance(this);
-        setmWheelSize( 0.7);//db.getFirstLoginSetting(login).getWheelSize());
-        setUserWeight(90);
+        Setting tmp = db.getFirstLoginSetting(login);
+        if(tmp != null) {
+            setmWheelSize(tmp.getWheelSize());
+            setUserWeight(tmp.getWeight());
+        } else {
+            setmWheelSize(1800);
+            setUserWeight(80);
+        }
+
     }
 
     @Override
