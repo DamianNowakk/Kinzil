@@ -112,6 +112,11 @@ public class CounterFragment extends Fragment {
         date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
         startTime = System.currentTimeMillis();
         startTimeFilter = System.currentTimeMillis();
+        stopTime = 0;
+
+        timeWithStopsTextView.setText("00:00:00");
+        TextView averageSpeedNoStopsTextView = (TextView) view.findViewById(R.id.result3);
+        averageSpeedNoStopsTextView.setText("0");
     }
 
     private long countTimeElapsed(long startTimeLocal) {
@@ -165,7 +170,6 @@ public class CounterFragment extends Fragment {
         double hoursInMilli = 3600000;
         double totalTime = (double)countTimeElapsed(startTime)/hoursInMilli;
         averageSpeed = (distance/1000)/totalTime;
-        //String averageSpeedString = String.format("%.2f", averageSpeed);
         String averageSpeedString = Integer.toString((int)averageSpeed);
         averageSpeedTextView.setText(averageSpeedString);
 
@@ -179,10 +183,12 @@ public class CounterFragment extends Fragment {
             String averageSpeedStringNoStops = Integer.toString((int)averageSpeedNoStops);
             TextView averageSpeedNoStopsTextView = (TextView) view.findViewById(R.id.result3);
             averageSpeedNoStopsTextView.setText(averageSpeedStringNoStops);
+
+            double calories = MainActivity.getUserWeight()  * (double)countTimeElapsed(startTimeFilter)/60000.0 * (0.6345* averageSpeed * averageSpeed + 0.7563 * averageSpeed + 36.725)/3600;
+            String caloriesString = Integer.toString((int)calories);
+            caloriesTextView.setText(caloriesString);
         }
 
-        double calories = MainActivity.getUserWeight()  * (double)countTimeElapsed(startTime)/60000.0 * (0.6345* averageSpeed * averageSpeed + 0.7563 * averageSpeed + 36.725)/3600;
-        String caloriesString = Integer.toString((int)calories);
-        caloriesTextView.setText(caloriesString);
+
     }
 }
