@@ -33,7 +33,7 @@ public class CscAnalyser { //TODO zmiana kodu
                 long revs = currCumulativeWheelRevolutions - prevCumulativeWheelRevolutions;
                 speed = revs * Math.PI * MainActivity.getmWheelSize() / wheelTimeDiff;
                 speedKmH = speed * 3.6;
-                newDistance = revs * Math.PI * MainActivity.getmWheelSize();
+                newDistance = revs * MainActivity.getmWheelSize();
             }
             else {
                 if(counter == 4) {
