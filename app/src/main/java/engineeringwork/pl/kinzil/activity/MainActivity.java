@@ -349,6 +349,11 @@ public class MainActivity extends AppCompatActivity
             }
         }
 
+        public void setStart(Boolean start)
+        {
+            mapFragment.setStart(start);
+        }
+
         @Override
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
