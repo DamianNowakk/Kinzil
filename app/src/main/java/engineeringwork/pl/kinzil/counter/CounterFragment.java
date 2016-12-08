@@ -31,7 +31,7 @@ public class CounterFragment extends Fragment {
     double speed;
     double averageSpeed;
     double distance;
-    int calories;
+    double calories;
     String time;
     String date;
     boolean isTripStarted, isTripStopped = false;
@@ -91,7 +91,7 @@ public class CounterFragment extends Fragment {
         ((MainActivity)getActivity()).stopNotifications();
         String map = ((MainActivity)getActivity()).getmSectionsPagerAdapter().getMap();
         String  login = ((MainActivity)getActivity()).getLogin();
-        Trip newTrip = new Trip(20, login, maxSpeed, averageSpeed, distance/1000, 0, time, date, map);
+        Trip newTrip = new Trip(0, login, maxSpeed, averageSpeed, distance/1000, (int)calories, time, date, map);
         db.tripInsert(newTrip);
         Toast.makeText((MainActivity)getActivity(), "Trip saved", Toast.LENGTH_LONG).show();
     }
@@ -186,7 +186,7 @@ public class CounterFragment extends Fragment {
             TextView averageSpeedNoStopsTextView = (TextView) view.findViewById(R.id.result3);
             averageSpeedNoStopsTextView.setText(averageSpeedStringNoStops);
 
-            double calories = MainActivity.getUserWeight()  * (double)countTimeElapsed(startTimeFilter)/60000.0 * (0.6345* averageSpeed * averageSpeed + 0.7563 * averageSpeed + 36.725)/3600;
+            calories = MainActivity.getUserWeight()  * (double)countTimeElapsed(startTimeFilter)/60000.0 * (0.6345* averageSpeed * averageSpeed + 0.7563 * averageSpeed + 36.725)/3600;
             String caloriesString = Integer.toString((int)calories);
             caloriesTextView.setText(caloriesString);
         }
