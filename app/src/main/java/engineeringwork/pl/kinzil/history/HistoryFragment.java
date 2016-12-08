@@ -136,7 +136,7 @@ public class HistoryFragment extends ListFragment implements
     }
 
     private void getDataFromDataBase(){
-        databaseHelper.tripInsert(new Trip(1,login,20.0f,21.0f,22.0f,11,"6h30m","11-11-2016","{\"Location\":[{\"Latitude\":54.3702977,\"Longitude\":18.6103648},{\"Latitude\":54.369599,\"Longitude\":18.6137419},{\"Latitude\":54.3704764,\"Longitude\":18.6183026},{\"Latitude\":54.3688096,\"Longitude\":18.6294947},{\"Latitude\":54.3574164,\"Longitude\":18.6466144},{\"Latitude\":54.3475724,\"Longitude\":18.6455632}],\"Size\":6}"));
+        databaseHelper.tripInsert(new Trip(1,login,20.0f,21.0f,22.0f,11,"6h30m","11-11-2016","{\"Location\":[{\"Latitude\":54.3702977,\"Longitude\":18.6103648},{\"Latitude\":54.369599,\"Longitude\":18.6137419},{\"Latitude\":54.3704764,\"Longitude\":18.6183026},{\"Latitude\":54.3688096,\"Longitude\":18.6294947},{\"Latitude\":54.3574164,\"Longitude\":18.6466144},{\"Latitude\":54.3475724,\"Longitude\":18.6455632}],\"Size\":6}", "5h", 2.0f));
         ArrayList<Trip> tripsToAdd = databaseHelper.getTrip(login);
         if(tripsToAdd != null){
             trips.addAll(tripsToAdd);

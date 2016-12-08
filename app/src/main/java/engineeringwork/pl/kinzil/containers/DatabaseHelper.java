@@ -28,6 +28,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TRIP_COL_6 = "TIME";
     private static final String TRIP_COL_7 = "DATE";
     private static final String TRIP_COL_8 = "MAP";
+    private static final String TRIP_COL_9 = "RIDETIME";
+    private static final String TRIP_COL_10 = "AVGSPEEDNOSTOP";
 
     private static final String TABLE_SETTINGS = "Settings";
     private static final String SETTINGS_COL_0 = "ID";
@@ -75,7 +77,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + TRIP_COL_5 + " INTEGER,"
                 + TRIP_COL_6 + " TEXT,"
                 + TRIP_COL_7 + " TEXT,"
-                + TRIP_COL_8 + " TEXT" + ")";
+                + TRIP_COL_8 + " TEXT,"
+                + TRIP_COL_9 + " TEXT,"
+                + TRIP_COL_10 + " REAL" + ")";
         db.execSQL(CREATE_TABLE);
 
         CREATE_TABLE = "CREATE TABLE " + TABLE_SETTINGS + "("
@@ -291,6 +295,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(TRIP_COL_6, trip.getTime());
         contentValues.put(TRIP_COL_7, trip.getDate());
         contentValues.put(TRIP_COL_8, trip.getMap());
+        contentValues.put(TRIP_COL_9, trip.getRideTime());
+        contentValues.put(TRIP_COL_10, trip.getAvgSpeedNoStop());
         long result = db.insert(TABLE_TRIP, null, contentValues);
         return result != -1;
     }
@@ -303,7 +309,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (cursor.getCount() == 0)
             return null;
         try {
-            for(int i=0; i < cursor.getCount(); i++) { // trzeba przetestowac
+            for(int i=0; i < cursor.getCount(); i++) {
                 Trip trip = new Trip();
                 cursor.moveToNext();
                 trip.setId(cursor.getInt(0));
@@ -315,6 +321,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 trip.setTime(cursor.getString(6));
                 trip.setDate(cursor.getString(7));
                 trip.setMap(cursor.getString(8));
+                trip.setRideTime(cursor.getString(9));
+                trip.setAvgSpeedNoStop(cursor.getFloat(10));
                 tripList.add(trip);
             }
         } finally {
