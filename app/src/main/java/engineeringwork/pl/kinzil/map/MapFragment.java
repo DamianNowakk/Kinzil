@@ -47,6 +47,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public void setStart(Boolean start)
     {
         isStart = start;
+        if(polylineFinalMain != null && !start)
+            polylineFinalMain.remove();
     }
 
 
@@ -212,11 +214,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                             }
                         }
                     }
-                }
-                else
-                {
-                    if(polylineFinalMain != null)
-                        polylineFinalMain.remove();
                 }
             }
         });
