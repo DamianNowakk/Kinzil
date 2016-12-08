@@ -4,7 +4,7 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:weightSum="1"
-    android:background="#2a7df1">
+    android:background="#64B5F6">
 
     <TextView
         android:text="@string/settings"

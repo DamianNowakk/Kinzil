@@ -61,8 +61,8 @@ public class CounterFragment extends Fragment {
         final Button button = (Button) view.findViewById(R.id.startTrip);
         button.setEnabled(state);
         button.setText(buttonText);
-        TextView stateView = (TextView) view.findViewById(R.id.StateView);
-        stateView.setText(stateMessage);
+        //TextView stateView = (TextView) view.findViewById(R.id.StateView);
+        //stateView.setText(stateMessage);
     }
 
     private void addListeners(View view) {
