@@ -55,6 +55,8 @@ public class SettingsFragment extends Fragment {
     {
         wheelSizeTxt.setText("Wheel size: " + setting.getWheelSize() + "mm");
         weightTxt.setText("Your weight: " + setting.getWeight() + "kg");
+        MainActivity.setmWheelSize(setting.getWheelSize());
+        MainActivity.setUserWeight(setting.getWeight());
     }
 
     private void openDialog(final Setting setting)
