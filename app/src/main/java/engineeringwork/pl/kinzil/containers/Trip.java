@@ -10,6 +10,8 @@ public class Trip {
     private String time;
     private String date;
     private String map;
+    private String rideTime;
+    private double avgSpeedNoStop;
 
     public int getId() {
         return id;
@@ -75,12 +77,40 @@ public class Trip {
         this.date = date;
     }
 
-    public String getMap() {
-        return map;
+    public String getMap() { return map; }
+
+    public double getAvgSpeedNoStop() {
+        return avgSpeedNoStop;
+    }
+
+    public void setAvgSpeedNoStop(double avgSpeedNoStop) {
+        this.avgSpeedNoStop = avgSpeedNoStop;
+    }
+
+    public String getRideTime() {
+        return rideTime;
+    }
+
+    public void setRideTime(String rideTime) {
+        this.rideTime = rideTime;
     }
 
     public void setMap(String map) {
         this.map = map;
+    }
+
+    public Trip(int id, String login, double maxSpeed, double avgSpeed, double distance, int calories, String time, String date, String map, String rideTime, double avgSpeedNoStop) {
+        this.id = id;
+        this.login = login;
+        this.maxSpeed = maxSpeed;
+        this.avgSpeed = avgSpeed;
+        this.distance = distance;
+        this.calories = calories;
+        this.time = time;
+        this.date = date;
+        this.map = map;
+        this.rideTime = rideTime;
+        this.avgSpeedNoStop = avgSpeedNoStop;
     }
 
     public Trip(int id, String login, double maxSpeed, double avgSpeed,
