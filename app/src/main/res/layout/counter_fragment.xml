@@ -176,9 +176,9 @@
 
             <ImageView
                 android:layout_height="match_parent"
-                android:src="@mipmap/ic_avgSNO"
                 android:id="@+id/counterImageView3"
-                android:layout_width="65dp" />
+                android:layout_width="65dp"
+                android:src="@mipmap/ic_avg_no" />
 
             <LinearLayout
                 android:orientation="vertical"
@@ -226,7 +226,7 @@
             android:layout_weight=".50">
 
             <ImageView
-                android:src="@mipmap/ic_hourglassNO"
+                android:src="@mipmap/ic_hourglass_no"
                 android:id="@+id/counterImageView8"
                 android:layout_width="65dp"
                 android:layout_height="match_parent" />
