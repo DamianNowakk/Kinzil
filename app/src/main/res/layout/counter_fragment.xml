@@ -11,7 +11,7 @@
         android:gravity="center_horizontal"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight=".30" >
+        android:layout_weight=".22" >
 
         <LinearLayout
             android:orientation="horizontal"
@@ -36,7 +36,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="36px"
                     android:id="@+id/resultLabel6"
-                    android:textAlignment="textStart"
+                    android:gravity="bottom"
                     android:paddingTop="@dimen/counter_header_padding_top" />
 
                 <LinearLayout
@@ -49,8 +49,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/result6"
-                        android:textSize="72px"
-                        android:textAlignment="textStart" />
+                        android:textSize="68px"
+                        />
 
                     <TextView
                         android:text="km/h"
@@ -483,4 +483,11 @@
         android:layout_height="0dp"
         android:id="@+id/startTrip"
         android:layout_weight=".1"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:id="@+id/StateView"
+        android:layout_span="1"
+        android:layout_height="0dp"
+        android:layout_weight=".08"
+        android:textAlignment="center" />
 </LinearLayout>
