@@ -176,7 +176,7 @@
 
             <ImageView
                 android:layout_height="match_parent"
-                android:src="@mipmap/ic_avg_speed"
+                android:src="@mipmap/ic_avgSNO"
                 android:id="@+id/counterImageView3"
                 android:layout_width="65dp" />
 
@@ -226,7 +226,7 @@
             android:layout_weight=".50">
 
             <ImageView
-                android:src="@mipmap/ic_hourglass"
+                android:src="@mipmap/ic_hourglassNO"
                 android:id="@+id/counterImageView8"
                 android:layout_width="65dp"
                 android:layout_height="match_parent" />
@@ -261,57 +261,6 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight=".15">
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight=".50">
-
-            <ImageView
-                android:layout_height="match_parent"
-                android:src="@mipmap/ic_path"
-                android:id="@+id/counterImageView9"
-                android:layout_width="65dp" />
-
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <TextView
-                    android:text="@string/result1"
-                    android:layout_width="match_parent"
-                    android:textSize="@dimen/counter_header_size"
-                    android:id="@+id/resultLabel9"
-                    android:gravity="bottom"
-                    android:layout_height="0dp"
-                    android:layout_weight=".40" />
-
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight=".60" >
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/result9"
-                        android:textSize="@dimen/counter_value_size"
-                        android:text="0" />
-
-                    <TextView
-                        android:text="km"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/textView99"
-                        android:textSize="@dimen/counter_unit_size"
-                        android:layout_marginLeft="@dimen/counter_unit_margin" />
-
-                </LinearLayout>
-            </LinearLayout>
-        </LinearLayout>
 
         <LinearLayout
             android:orientation="horizontal"
@@ -357,6 +306,57 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/textView5"
+                        android:textSize="@dimen/counter_unit_size"
+                        android:layout_marginLeft="@dimen/counter_unit_margin" />
+
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight=".50">
+
+            <ImageView
+                android:layout_height="match_parent"
+                android:src="@mipmap/ic_path"
+                android:id="@+id/counterImageView9"
+                android:layout_width="65dp" />
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:text="@string/result1"
+                    android:layout_width="match_parent"
+                    android:textSize="@dimen/counter_header_size"
+                    android:id="@+id/resultLabel9"
+                    android:gravity="bottom"
+                    android:layout_height="0dp"
+                    android:layout_weight=".40" />
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight=".60" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/result9"
+                        android:textSize="@dimen/counter_value_size"
+                        android:text="0" />
+
+                    <TextView
+                        android:text="km"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/textView99"
                         android:textSize="@dimen/counter_unit_size"
                         android:layout_marginLeft="@dimen/counter_unit_margin" />
 
