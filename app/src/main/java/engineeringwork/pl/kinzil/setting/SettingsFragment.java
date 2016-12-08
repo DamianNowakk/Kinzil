@@ -55,6 +55,8 @@ public class SettingsFragment extends Fragment {
     {
         wheelSizeTxt.setText("Wheel size: " + setting.getWheelSize() + "mm");
         weightTxt.setText("Your weight: " + setting.getWeight() + "kg");
+        MainActivity.setmWheelSize(setting.getWheelSize());
+        MainActivity.setUserWeight(setting.getWeight());
     }
 
     private void openDialog(final Setting setting)
@@ -65,16 +67,22 @@ public class SettingsFragment extends Fragment {
         Button btnLogin = (Button) login.findViewById(R.id.btn_create);
         Button btnCancel = (Button) login.findViewById(R.id.btn_cancel);
         final EditText txtWheelSize = (EditText)login.findViewById(R.id.txt_wheel_size);
-        txtWheelSize.setText(setting.getWheelSize());
+        txtWheelSize.setText(String.valueOf(setting.getWheelSize()) );
         final EditText txtWeight = (EditText)login.findViewById(R.id.txt_weight);
-        txtWeight.setText(setting.getWeight());
+        txtWeight.setText(String.valueOf(setting.getWeight()));
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!txtWheelSize.getText().toString().equals(""))
-                    setting.setWheelSize(Integer.parseInt(txtWheelSize.getText().toString()));
-                if(!txtWeight.getText().toString().equals(""))
-                    setting.setWeight(Integer.parseInt(txtWeight.getText().toString()));
+                try {
+                    if (!txtWheelSize.getText().toString().equals(""))
+                        setting.setWheelSize(Integer.parseInt(txtWheelSize.getText().toString()));
+                    if (!txtWeight.getText().toString().equals(""))
+                        setting.setWeight(Integer.parseInt(txtWeight.getText().toString()));
+                }
+                catch(Exception e)
+                {
+                    Toast.makeText(getContext(), "Error, bad data", Toast.LENGTH_LONG).show();
+                }
                 setData();
                 Setting tmp = db.getFirstLoginSetting(setting.getLogin());
                 if(tmp == null) {
