@@ -71,12 +71,14 @@ public class CounterFragment extends Fragment {
             public void onClick(View v) {
                 if(!isTripStarted) {
                     startTrip();
+                    ((MainActivity)getActivity()).getmSectionsPagerAdapter().setStart(true);
                     button.setText("STOP");
                     isTripStarted = true;
                 }
                 else {
                     stopTrip();
                     button.setText("START");
+                    ((MainActivity)getActivity()).getmSectionsPagerAdapter().setStart(false);
                     isTripStarted = false;
                 }
             }

@@ -43,6 +43,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private Polyline polylineFinalMain;
     private ArrayList<Location> locationArrayListSecondary = null ;
     private Polyline polylineFinalSecondary;
+    private boolean isStart;
+    public void setStart(Boolean start)
+    {
+        isStart = start;
+    }
+
 
     public String getMapMain()
     {
@@ -100,7 +106,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         transaction.replace(R.id.mapView, fragment);
         transaction.commit();
         fragment.getMapAsync(this);
-
+        isStart = false;
         popUpMapMenu = new PopUpMapMenu(getActivity());
 
         return view;
@@ -195,17 +201,22 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                     CameraUpdate cu = CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), popUpMapMenu.getMapSetting().getZoom());
                     mMap.animateCamera(cu);
                 }
-
-                if(locationArrayListMain.size() == 0) {
-                    locationArrayListMain.add(location);
-                }
-                else {
-                    if(checkLocation(locationArrayListMain.get(locationArrayListMain.size() - 1), location)) {
+                if(isStart) {
+                    if (locationArrayListMain.size() == 0) {
                         locationArrayListMain.add(location);
-                        if(popUpMapMenu.getMapSetting().isShowRoute()) {
-                            drawPrimaryLinePath();
+                    } else {
+                        if (checkLocation(locationArrayListMain.get(locationArrayListMain.size() - 1), location)) {
+                            locationArrayListMain.add(location);
+                            if (popUpMapMenu.getMapSetting().isShowRoute()) {
+                                drawPrimaryLinePath();
+                            }
                         }
                     }
+                }
+                else
+                {
+                    if(polylineFinalMain != null)
+                        polylineFinalMain.remove();
                 }
             }
         });
