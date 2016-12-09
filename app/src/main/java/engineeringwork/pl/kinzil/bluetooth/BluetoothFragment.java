@@ -35,6 +35,7 @@ public class BluetoothFragment extends Fragment {
     private ArrayList<String> bluetoothDevicesNames;
     private ListView discoveredDevicesListBox;
     private StableArrayAdapter adapter;
+    Button buttonOne;
 
     private static final int SCAN_TIME = 10000;
 
@@ -71,7 +72,7 @@ public class BluetoothFragment extends Fragment {
     }
 
     private void addListeners(View view) {
-        Button buttonOne = (Button) view.findViewById(R.id.scanButton);
+        buttonOne = (Button) view.findViewById(R.id.scanButton);
         buttonOne.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
                 bluetoothDevicesNames.clear();
@@ -132,14 +133,17 @@ public class BluetoothFragment extends Fragment {
             mHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
+                    buttonOne.setEnabled(true);
                     mScanning = false;
                     mBluetoothAdapter.stopLeScan(mLeScanCallback);
                     //invalidateOptionsMenu();
                 }
             }, SCAN_TIME);
+            buttonOne.setEnabled(false);
             mScanning = true;
             mBluetoothAdapter.startLeScan(mLeScanCallback);
         } else {
+            buttonOne.setEnabled(true);
             mScanning = false;
             mBluetoothAdapter.stopLeScan(mLeScanCallback);
         }
