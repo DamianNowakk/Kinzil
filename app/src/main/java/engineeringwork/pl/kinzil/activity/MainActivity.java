@@ -155,33 +155,21 @@ public class MainActivity extends AppCompatActivity
                 mConnected = true;
                 mSectionsPagerAdapter.counterFragment.setButtonStatus(true, "START", "");
                 Toast.makeText(MainActivity.this, "Connected to device", Toast.LENGTH_SHORT).show();
-                //invalidateOptionsMenu();
             } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
                 mConnected = false;
                 mSectionsPagerAdapter.counterFragment.setButtonStatus(false, "START" ,"Disconnected");
-            } else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
-                // Show all the supported services and characteristics on the user interface.
-
             } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
                 String speed = intent.getStringExtra("EXTRA_SPEED");
                 String wheelTime = intent.getStringExtra("WHEEL_TIME");
                 Double newDistance = intent.getDoubleExtra("NEW_DISTANCE", 0.0);
 
-                if(newDistance == 0 && isStopStarted == false)
-                {
+                if(newDistance == 0 && isStopStarted == false) {
                     mSectionsPagerAdapter.counterFragment.startStopTime();
                     isStopStarted = true;
-                }
-                else if(newDistance == 0 && isStopStarted == true)
-                {
-
-                }
-                else if(newDistance > 0 && isStopStarted == true)
-                {
+                } else if(newDistance > 0 && isStopStarted == true) {
                     mSectionsPagerAdapter.counterFragment.subtractTime();
                     isStopStarted = false;
                 }
-
                 displayData(intent.getStringExtra(BluetoothLeService.EXTRA_DATA), speed, wheelTime, newDistance);
             }
         }
@@ -195,9 +183,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void bindUpdateService (Intent intent) {
-        //mDeviceName = intent.getStringExtra("DEVICE_NAME");
         mDeviceAddress = intent.getStringExtra("DEVICE_ADDRESS");
-
         Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);
         mConnected = bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
     }
@@ -260,7 +246,7 @@ public class MainActivity extends AppCompatActivity
 
         registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
         if (mBluetoothLeService != null) {
-            final boolean result = mBluetoothLeService.connect(mDeviceAddress);
+            mBluetoothLeService.connect(mDeviceAddress);
         }
     }
 

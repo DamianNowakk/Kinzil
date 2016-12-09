@@ -27,13 +27,8 @@ import engineeringwork.pl.kinzil.containers.Trip;
 public class CounterFragment extends Fragment {
     View view;
     long startTime, startTimeFilter, stopTime;
-    double maxSpeed;
-    double speed;
-    double averageSpeed;
-    double distance;
-    double calories;
-    String time;
-    String date;
+    double averageSpeed, averageSpeedNoStops, distance, calories, maxSpeed, speed;
+    String time, timeNoStops, date;
     boolean isTripStarted, isTripStopped = false;
     DatabaseHelper db;
     TextView averageSpeedTextView, maxSpeedTextView, distanceTextView, speedTextView, timeTextView, timeWithStopsTextView, caloriesTextView;
@@ -91,7 +86,7 @@ public class CounterFragment extends Fragment {
         ((MainActivity)getActivity()).stopNotifications();
         String map = ((MainActivity)getActivity()).getmSectionsPagerAdapter().getMap();
         String  login = ((MainActivity)getActivity()).getLogin();
-        Trip newTrip = new Trip(0, login, maxSpeed, averageSpeed, distance/1000, (int)calories, time, date, map);
+        Trip newTrip = new Trip(0, login, maxSpeed, averageSpeed, distance/1000, (int)calories, time, date, map, timeNoStops, averageSpeedNoStops);
         db.tripInsert(newTrip);
         Toast.makeText((MainActivity)getActivity(), "Trip saved", Toast.LENGTH_LONG).show();
     }
@@ -125,7 +120,7 @@ public class CounterFragment extends Fragment {
         return System.currentTimeMillis() - startTimeLocal;
     }
 
-    private void updateTimeTextView(long startTimeLocal, TextView textViewToChange) {
+    private String updateTimeTextView(long startTimeLocal, TextView textViewToChange) {
         long secondsInMilli = 1000;
         long minutesInMilli = secondsInMilli * 60;
         long hoursInMilli = minutesInMilli * 60;
@@ -137,11 +132,9 @@ public class CounterFragment extends Fragment {
         different = different % minutesInMilli;
         long elapsedSeconds = different / secondsInMilli;
 
-        //time = String.format("%02d", elapsedHours) + ":" + String.valueOf(elapsedMinutes) + ":" + String.valueOf(elapsedSeconds);
-        time = String.format("%02d", elapsedHours) + ":" + String.format("%02d", elapsedMinutes) + ":" + String.format("%02d", elapsedSeconds);
-        //SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-        //String time2 = sdf.format(different);
-        textViewToChange.setText(time);
+        String timeString = String.format("%02d", elapsedHours) + ":" + String.format("%02d", elapsedMinutes) + ":" + String.format("%02d", elapsedSeconds);
+        textViewToChange.setText(timeString);
+        return timeString;
     }
 
     public void subtractTime(){
@@ -175,13 +168,13 @@ public class CounterFragment extends Fragment {
         String averageSpeedString = Integer.toString((int)averageSpeed);
         averageSpeedTextView.setText(averageSpeedString);
 
-        updateTimeTextView(startTime, timeTextView);
+        time = updateTimeTextView(startTime, timeTextView);
         if(isTripStopped == false)
         {
-            updateTimeTextView(startTimeFilter, timeWithStopsTextView);
+            timeNoStops = updateTimeTextView(startTimeFilter, timeWithStopsTextView);
 
             double totalTimeNoStops = (double)countTimeElapsed(startTimeFilter)/hoursInMilli;
-            double averageSpeedNoStops = (distance/1000)/totalTimeNoStops;
+            averageSpeedNoStops = (distance/1000)/totalTimeNoStops;
             String averageSpeedStringNoStops = Integer.toString((int)averageSpeedNoStops);
             TextView averageSpeedNoStopsTextView = (TextView) view.findViewById(R.id.result3);
             averageSpeedNoStopsTextView.setText(averageSpeedStringNoStops);
