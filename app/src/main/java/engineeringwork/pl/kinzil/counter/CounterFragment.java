@@ -2,10 +2,8 @@ package engineeringwork.pl.kinzil.counter;
 
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.os.Bundle;
-import android.support.annotation.IntegerRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +15,6 @@ import com.movisens.smartgattlib.Characteristic;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.concurrent.TimeUnit;
 
 import engineeringwork.pl.kinzil.R;
 import engineeringwork.pl.kinzil.activity.MainActivity;
