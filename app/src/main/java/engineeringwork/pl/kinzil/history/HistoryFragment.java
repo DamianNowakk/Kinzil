@@ -2,7 +2,6 @@ package engineeringwork.pl.kinzil.history;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
@@ -10,7 +9,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
@@ -19,15 +17,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.Transformation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -51,7 +45,8 @@ import engineeringwork.pl.kinzil.containers.TripArrayAdapter;
 import engineeringwork.pl.kinzil.containers.ViewAnimations;
 
 public class HistoryFragment extends ListFragment implements
-        AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener, MenuItem.OnMenuItemClickListener, MainActivity.Callbacks, OnMapReadyCallback {
+        AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener,
+        MenuItem.OnMenuItemClickListener, MainActivity.Callbacks, OnMapReadyCallback {
     View view;
 
     private String login;
@@ -104,13 +99,17 @@ public class HistoryFragment extends ListFragment implements
         TextView distance = (TextView) detailsView.findViewById(R.id.distance);
         TextView calories = (TextView) detailsView.findViewById(R.id.calories);
         TextView duration = (TextView) detailsView.findViewById(R.id.duration);
+        TextView avgSpeedWithoutStops = (TextView) detailsView.findViewById(R.id.avgSpeedWithoutStops);
+        TextView durationWithoutStops = (TextView) detailsView.findViewById(R.id.durationWithoutStops);
 
-        avgSpeed.setText(String.valueOf(trip.getAvgSpeed()));
+        avgSpeed.setText(String.valueOf(trip.getAvgSpeed()) + " " +  getString(R.string.speed_unit));
         date.setText(String.valueOf(trip.getDate()));
-        distance.setText(String.valueOf(trip.getDistance()));
-        maxSpeed.setText(String.valueOf(trip.getMaxSpeed()));
-        calories.setText(String.valueOf(trip.getCalories()));
+        distance.setText(String.valueOf(trip.getDistance()) + " " + getString(R.string.distance_unit));
+        maxSpeed.setText(String.valueOf(trip.getMaxSpeed()) + " " +  getString(R.string.speed_unit));
+        calories.setText(String.valueOf(trip.getCalories()) + " " +  getString(R.string.calories_unit));
         duration.setText(String.valueOf(trip.getTime()));
+        avgSpeedWithoutStops.setText(String.valueOf(trip.getAvgSpeedNoStop()) + " " +  getString(R.string.speed_unit));
+        durationWithoutStops.setText(String.valueOf(trip.getRideTime()));
         try {
             setMapSecondary(trip.getMap());
         } catch (JSONException e) {
@@ -130,7 +129,6 @@ public class HistoryFragment extends ListFragment implements
             @Override
             public void onClick(View view) {
                 ((MainActivity)getActivity()).getmSectionsPagerAdapter().setMapSecondary(trip.getMap());
-                Toast.makeText(getContext(), "Wczytano mape", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -154,9 +152,9 @@ public class HistoryFragment extends ListFragment implements
     @Override
     public boolean onItemLongClick(AdapterView<?> adapterView, View view, final int position, long l) {
         new AlertDialog.Builder(getContext())
-                .setTitle("Usuwanie")
-                .setMessage("Czy napewno chcesz usunąć tę wycieczke?")
-                .setPositiveButton("tak", new DialogInterface.OnClickListener() {
+                .setTitle(R.string.Deleting_window_tittle)
+                .setMessage(R.string.Deleteing_trip_confirmation)
+                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         databaseHelper.deleteTrip(trips.get(position).getId());
@@ -164,7 +162,7 @@ public class HistoryFragment extends ListFragment implements
                         adapter.notifyDataSetChanged();
                     }
                 })
-                .setNegativeButton("nie", new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         return;
@@ -256,13 +254,13 @@ public class HistoryFragment extends ListFragment implements
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
         menu.clear();
-        MenuItem deleteDataBase = menu.add("Usuń wszystkie wycieczki");
+        MenuItem deleteDataBase = menu.add(R.string.Deleting_all_trips_info);
         deleteDataBase.setOnMenuItemClickListener(this);
     }
 
     @Override
     public boolean onMenuItemClick(MenuItem menuItem) {
-        if(menuItem.getTitle().toString().equalsIgnoreCase("Usuń wszystkie wycieczki")){
+        if(menuItem.getTitle().toString().equalsIgnoreCase(getString(R.string.Deleting_all_trips_info))){
             databaseHelper.deleteAllTrips();
             trips.clear();
             adapter.notifyDataSetChanged();

@@ -36,11 +36,13 @@ public class TripArrayAdapter extends ArrayAdapter<Trip> {
         ImageView time = (ImageView) view.findViewById(R.id.image);
 
         date.setText(trip.getDate());
-        distance.setText(String.valueOf(trip.getDistance()));
-        avgSpeed.setText(String.valueOf(trip.getAvgSpeed()));
+        distance.setText(String.valueOf(trip.getDistance()) + " " + context.getString(R.string.distance_unit));
+        avgSpeed.setText(String.valueOf(trip.getAvgSpeed()) + " " + context.getString(R.string.speed_unit));
         //TODO: w zaleznosci od godziny ustawic odpowiedni obrazek
         time.setImageResource(R.mipmap.ic_time_icon);
 
         return view;
     }
+
+
 }
