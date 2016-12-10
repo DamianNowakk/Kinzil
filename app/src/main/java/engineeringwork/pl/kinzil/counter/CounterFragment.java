@@ -37,7 +37,7 @@ public class CounterFragment extends Fragment {
 
         addListeners(view);
         db = DatabaseHelper.getInstance(getActivity());
-        distanceTextView = (TextView) view.findViewById(R.id.result1);
+        distanceTextView = (TextView) view.findViewById(R.id.result9);
         timeTextView = (TextView) view.findViewById(R.id.result2);
         timeWithStopsTextView = (TextView) view.findViewById(R.id.timeWithStops);
         averageSpeedTextView = (TextView) view.findViewById(R.id.result7);
@@ -155,6 +155,11 @@ public class CounterFragment extends Fragment {
         distance += newDistance;
         String distanceString = String.format("%.2f", distance/1000);
         distanceTextView.setText(distanceString);
+
+        MainActivity.setUserOverallDistance(MainActivity.getUserOverallDistance() + newDistance);
+        TextView overallTextView = (TextView)  view.findViewById(R.id.result1);
+        String overallString =  String.format("%.2f", MainActivity.getUserOverallDistance()/1000);
+        overallTextView.setText(overallString);
 
         String maxSpeedString = Integer.toString((int)maxSpeed);
         maxSpeedTextView.setText(maxSpeedString);
