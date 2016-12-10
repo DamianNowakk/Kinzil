@@ -36,6 +36,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String SETTINGS_COL_1 = "LOGIN";
     private static final String SETTINGS_COL_2 = "WHEELSIZE";
     private static final String SETTINGS_COL_3 = "WEIGHT";
+    private static final String SETTINGS_COL_4 = "ALLDISTANCE";
 
     private static final String TABLE_MAPSETTINGS = "MapSettings";
     private static final String MAPSETTINGS_COL_0 = "ID";
@@ -86,7 +87,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + SETTINGS_COL_0 + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + SETTINGS_COL_1 + " TEXT,"
                 + SETTINGS_COL_2 + " INTEGER,"
-                + SETTINGS_COL_3 + " INTEGER" + ")";
+                + SETTINGS_COL_3 + " INTEGER,"
+                + SETTINGS_COL_4 + " REAL" + ")";
 
         db.execSQL(CREATE_TABLE);
 
@@ -248,6 +250,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(SETTINGS_COL_1, setting.getLogin());
         contentValues.put(SETTINGS_COL_2, setting.getWheelSize());
         contentValues.put(SETTINGS_COL_3, setting.getWeight());
+        contentValues.put(SETTINGS_COL_4, setting.getAllDistance());
         long result = db.insert(TABLE_SETTINGS, null, contentValues);
         return result != -1;
     }
@@ -260,6 +263,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(SETTINGS_COL_1, setting.getLogin());
         contentValues.put(SETTINGS_COL_2, setting.getWheelSize());
         contentValues.put(SETTINGS_COL_3, setting.getWeight());
+        contentValues.put(SETTINGS_COL_4, setting.getAllDistance());
         long result = db.update(TABLE_SETTINGS, contentValues, "ID = ?", new String[]{Integer.toString(setting.getId())});
         return result != -1;
     }
@@ -278,6 +282,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             setting.setLogin(cursor.getString(1));
             setting.setWheelSize(cursor.getInt(2));
             setting.setWeight(cursor.getInt(3));
+            setting.setAllDistance(cursor.getFloat(4));
         } finally {
             cursor.close();
         }

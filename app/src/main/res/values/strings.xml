@@ -45,6 +45,8 @@
     <string name="low_energy_bluetooth_is_not_supported">Low energy bluetooth is not supported</string>
     <string name="bluetooth_is_not_supported">bluetooth is not supported</string>
     <string name="drive_duration">Ride duration</string>
+    <string name="your_overall_distance_0km">Your overall distance: 0km</string>
+    <string name="distance">Distance:</string>
 
 
     <string-array name="spinner_item_map_menu">

@@ -29,6 +29,14 @@
         android:gravity="center"
         android:layout_weight="0.05"/>
 
+    <TextView
+        android:text="@string/your_overall_distance_0km"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/distance_textView"
+        android:gravity="center"
+        android:layout_weight="0.05"/>
+
     <Button
         android:text="@string/edit"
         android:layout_width="match_parent"

@@ -5,6 +5,7 @@ public class Setting {
     private String login;
     private int wheelSize; //mm
     private int weight;
+    private double allDistance;
 
     public int getId() {
         return id;
@@ -38,6 +39,14 @@ public class Setting {
         this.weight = weight;
     }
 
+    public double getAllDistance() {
+        return allDistance;
+    }
+
+    public void setAllDistance(double allDistance) {
+        this.allDistance = allDistance;
+    }
+
     public Setting(int id, String login, int wheelSize, int weight) {
         this.id = id;
         this.login = login;
@@ -49,6 +58,14 @@ public class Setting {
         this.login = login;
         this.wheelSize = wheelSize;
         this.weight = weight;
+    }
+
+    public Setting(int id, String login, int wheelSize, int weight, double allDistance) {
+        this.id = id;
+        this.login = login;
+        this.wheelSize = wheelSize;
+        this.weight = weight;
+        this.allDistance = allDistance;
     }
 
     public Setting(String login) {

@@ -68,13 +68,20 @@ public class MainActivity extends AppCompatActivity
     private String mDeviceAddress;
     private BluetoothGattCharacteristic mNotifyCharacteristic;
     private boolean mConnected = false, isStopStarted = false;
-    public static int mWheelSize;
-    public static int userWeight;
-
+    private static int mWheelSize;
+    private static int userWeight;
+    private static Double userOverallDistance;
     public synchronized static int getUserWeight() { return userWeight; }
     public synchronized static void setUserWeight(int weight) { userWeight = weight; }
     public synchronized static int getmWheelSize() { return mWheelSize; }
     public synchronized static void setmWheelSize(int size) { mWheelSize = size; }
+    public synchronized static Double getUserOverallDistance() {
+        return userOverallDistance;
+    }
+    public synchronized static void setUserOverallDistance(Double userOverallDistance) {
+        MainActivity.userOverallDistance = userOverallDistance;
+    }
+
     public String getLogin() {
         return login;
     }

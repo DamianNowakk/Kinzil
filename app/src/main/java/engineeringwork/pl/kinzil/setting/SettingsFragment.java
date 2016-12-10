@@ -22,6 +22,7 @@ public class SettingsFragment extends Fragment {
     private DatabaseHelper db;
     private TextView wheelSizeTxt;
     private TextView weightTxt;
+    private TextView distanceTxt;
     private Button editButton;
     private Setting setting;
     @Nullable
@@ -33,6 +34,7 @@ public class SettingsFragment extends Fragment {
 
         wheelSizeTxt = (TextView) view.findViewById(R.id.wheelSize_textView);
         weightTxt = (TextView) view.findViewById(R.id.weight_textView);
+        distanceTxt = (TextView) view.findViewById(R.id.distance_textView);
         editButton = (Button) view.findViewById(R.id.edit_Button);
         editButton.setOnClickListener(new View.OnClickListener()
         {
@@ -55,6 +57,7 @@ public class SettingsFragment extends Fragment {
     {
         wheelSizeTxt.setText("Wheel size: " + setting.getWheelSize() + "mm");
         weightTxt.setText("Your weight: " + setting.getWeight() + "kg");
+        distanceTxt.setText("Your overall distance: " + setting.getAllDistance() + "km");
         MainActivity.setmWheelSize(setting.getWheelSize());
         MainActivity.setUserWeight(setting.getWeight());
     }
@@ -70,6 +73,8 @@ public class SettingsFragment extends Fragment {
         txtWheelSize.setText(String.valueOf(setting.getWheelSize()) );
         final EditText txtWeight = (EditText)login.findViewById(R.id.txt_weight);
         txtWeight.setText(String.valueOf(setting.getWeight()));
+        final EditText txtDistance = (EditText)login.findViewById(R.id.txt_distance);
+        txtDistance.setText(String.valueOf(setting.getAllDistance()));
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,6 +83,8 @@ public class SettingsFragment extends Fragment {
                         setting.setWheelSize(Integer.parseInt(txtWheelSize.getText().toString()));
                     if (!txtWeight.getText().toString().equals(""))
                         setting.setWeight(Integer.parseInt(txtWeight.getText().toString()));
+                    if (!txtDistance.getText().toString().equals(""))
+                        setting.setAllDistance(Double.parseDouble(txtDistance.getText().toString()));
                 }
                 catch(Exception e)
                 {
