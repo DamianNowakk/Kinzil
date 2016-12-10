@@ -61,7 +61,7 @@ public class SettingsFragment extends Fragment {
         ((MainActivity)getActivity()).getmSectionsPagerAdapter().counterFragment.setOverall();
         wheelSizeTxt.setText("Wheel size: " + setting.getWheelSize() + "mm");
         weightTxt.setText("Your weight: " + setting.getWeight() + "kg");
-        distanceTxt.setText("Your overall distance: " + MainActivity.getUserOverallDistance() + "km");
+        distanceTxt.setText("Your overall distance: " + MainActivity.getUserOverallDistance() + "m");
     }
 
     private void openDialog(final Setting setting)
