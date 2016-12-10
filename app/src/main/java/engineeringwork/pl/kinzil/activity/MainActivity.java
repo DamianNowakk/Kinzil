@@ -126,6 +126,7 @@ public class MainActivity extends AppCompatActivity
             setUserWeight(tmp.getWeight());
             setUserOverallDistance(tmp.getAllDistance());
         } else {
+            tmp = new Setting();
             tmp.setAllDistance(0.0);
             tmp.setWeight(90);
             tmp.setWheelSize(1800);

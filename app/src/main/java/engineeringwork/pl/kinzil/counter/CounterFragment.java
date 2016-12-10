@@ -111,8 +111,9 @@ public class CounterFragment extends Fragment {
         distance = 0;
         date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
         startTime = System.currentTimeMillis();
-        startTimeFilter = System.currentTimeMillis();
         stopTime = 0;
+        startTimeFilter = System.currentTimeMillis();
+
 
         timeWithStopsTextView.setText("00:00:00");
         TextView averageSpeedNoStopsTextView = (TextView) view.findViewById(R.id.result3);
@@ -190,13 +191,11 @@ public class CounterFragment extends Fragment {
             String caloriesString = Integer.toString((int)calories);
             caloriesTextView.setText(caloriesString);
         }
-
-
     }
 
     public void setOverall()
     {
-        String overallString =  String.format("%.2f", MainActivity.getUserOverallDistance());
+        String overallString =  String.format("%.2f", MainActivity.getUserOverallDistance()/1000);
         overallTextView.setText(overallString);
     }
 }
