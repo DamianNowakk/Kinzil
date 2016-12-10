@@ -95,15 +95,6 @@ public class CounterFragment extends Fragment {
     }
 
     private void startTrip() {
-        BluetoothGattCharacteristic cscMeasurementChar = ((MainActivity)getActivity()).getmBluetoothLeService().getCharacteristic(Characteristic.CSC_MEASUREMENT);
-        boolean isConnected = ((MainActivity)getActivity()).isConnectedToDevice();
-        if (cscMeasurementChar != null && isConnected) {
-            ((MainActivity)getActivity()).readCharacteristic(cscMeasurementChar);
-        }
-        else {
-            setButtonStatus(false, "START" ,"Disconnected");
-        }
-
         ((MainActivity)getActivity()).getmBluetoothLeService().reset();
         calories = 0;
         maxSpeed = 0;
@@ -114,10 +105,18 @@ public class CounterFragment extends Fragment {
         stopTime = 0;
         startTimeFilter = System.currentTimeMillis();
 
-
         timeWithStopsTextView.setText("00:00:00");
         TextView averageSpeedNoStopsTextView = (TextView) view.findViewById(R.id.result3);
         averageSpeedNoStopsTextView.setText("0");
+
+        BluetoothGattCharacteristic cscMeasurementChar = ((MainActivity)getActivity()).getmBluetoothLeService().getCharacteristic(Characteristic.CSC_MEASUREMENT);
+        boolean isConnected = ((MainActivity)getActivity()).isConnectedToDevice();
+        if (cscMeasurementChar != null && isConnected) {
+            ((MainActivity)getActivity()).readCharacteristic(cscMeasurementChar);
+        }
+        else {
+            setButtonStatus(false, "START" ,"Disconnected");
+        }
     }
 
     private long countTimeElapsed(long startTimeLocal) {

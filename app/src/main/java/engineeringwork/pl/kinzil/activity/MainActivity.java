@@ -224,6 +224,8 @@ public class MainActivity extends AppCompatActivity
 
     public void readCharacteristic(BluetoothGattCharacteristic characteristic)
     {
+        isStopStarted = false;
+
         final int charaProperties = characteristic.getProperties();
         if ((charaProperties | BluetoothGattCharacteristic.PROPERTY_READ) > 0) {
             // If there is an active notification on a characteristic, clear
