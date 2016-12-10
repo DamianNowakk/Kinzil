@@ -39,7 +39,7 @@ public class TripArrayAdapter extends ArrayAdapter<Trip> {
         distance.setText(String.valueOf(trip.getDistance()) + " " + context.getString(R.string.distance_unit));
         avgSpeed.setText(String.valueOf(trip.getAvgSpeed()) + " " + context.getString(R.string.speed_unit));
         //TODO: w zaleznosci od godziny ustawic odpowiedni obrazek
-        time.setImageResource(R.mipmap.ic_time_icon);
+        time.setImageResource(R.mipmap.ic_ride);
 
         return view;
     }

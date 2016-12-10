@@ -115,7 +115,7 @@ public class HistoryFragment extends ListFragment implements
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        time.setImageResource(R.mipmap.ic_time_icon);
+        time.setImageResource(R.mipmap.ic_ride);
 
         FragmentManager manager = getFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
