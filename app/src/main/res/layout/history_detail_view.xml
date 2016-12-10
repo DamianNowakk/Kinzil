@@ -19,8 +19,7 @@
                 android:id="@+id/info"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginTop="5dp"
                 android:layout_toRightOf="@+id/image"
                 android:orientation="vertical">
 
@@ -32,16 +31,16 @@
                         android:id="@+id/dateLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
+                        android:layout_marginBottom="3dp"
                         android:text="@string/date"
-                        android:textSize="18sp" />
+                        android:textSize="14sp" />
 
                     <TextView
                         android:id="@+id/date"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:textSize="18sp" />
+                        android:layout_marginBottom="3dp"
+                        android:textSize="14sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -52,16 +51,16 @@
                         android:id="@+id/durationLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
+                        android:layout_marginBottom="3dp"
                         android:text="@string/duration"
-                        android:textSize="18sp" />
+                        android:textSize="14sp" />
 
                     <TextView
                         android:id="@+id/duration"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:textSize="15sp" />
+                        android:layout_marginBottom="3dp"
+                        android:textSize="14sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -72,16 +71,16 @@
                         android:id="@+id/distanceLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
+                        android:layout_marginBottom="3dp"
                         android:text="@string/distance"
-                        android:textSize="18sp" />
+                        android:textSize="14sp" />
 
                     <TextView
                         android:id="@+id/distance"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:textSize="15sp" />
+                        android:layout_marginBottom="3dp"
+                        android:textSize="14sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -92,16 +91,16 @@
                         android:id="@+id/avgSpeedLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
+                        android:layout_marginBottom="3dp"
                         android:text="@string/avg_speed"
-                        android:textSize="18sp" />
+                        android:textSize="14sp" />
 
                     <TextView
                         android:id="@+id/avgSpeed"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:textSize="15sp" />
+                        android:layout_marginBottom="3dp"
+                        android:textSize="14sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -112,16 +111,16 @@
                         android:id="@+id/maxSpeedLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
+                        android:layout_marginBottom="3dp"
                         android:text="@string/max_speed"
-                        android:textSize="18sp" />
+                        android:textSize="14sp" />
 
                     <TextView
                         android:id="@+id/maxSpeed"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:textSize="15sp" />
+                        android:layout_marginBottom="3dp"
+                        android:textSize="14sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -132,16 +131,16 @@
                         android:id="@+id/caloriesLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
+                        android:layout_marginBottom="3dp"
                         android:text="@string/calories_burned"
-                        android:textSize="18sp" />
+                        android:textSize="14sp" />
 
                     <TextView
                         android:id="@+id/calories"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:textSize="15sp" />
+                        android:layout_marginBottom="3dp"
+                        android:textSize="14sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -152,16 +151,16 @@
                         android:id="@+id/avgSpeedWithoutStopsLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
+                        android:layout_marginBottom="3dp"
                         android:text="@string/avg_speed_without_stops"
-                        android:textSize="18sp" />
+                        android:textSize="14sp" />
 
                     <TextView
                         android:id="@+id/avgSpeedWithoutStops"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:textSize="15sp" />
+                        android:layout_marginBottom="3dp"
+                        android:textSize="14sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -172,16 +171,16 @@
                         android:id="@+id/durationWithoutStopsLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
+                        android:layout_marginBottom="3dp"
                         android:text="@string/duration_without_stops"
-                        android:textSize="18sp" />
+                        android:textSize="14sp" />
 
                     <TextView
                         android:id="@+id/durationWithoutStops"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:textSize="15sp" />
+                        android:layout_marginBottom="3dp"
+                        android:textSize="14sp" />
                 </LinearLayout>
             </LinearLayout>
             <Button

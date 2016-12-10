@@ -310,8 +310,6 @@ public class MainActivity extends AppCompatActivity
             historyFragment = new HistoryFragment();
             fragmentManager.beginTransaction().replace(R.id.fragment_layout, historyFragment).commit();
             mCallbacks = (Callbacks) historyFragment;
-        } else if (id == R.id.nav_aboutus) {
-
         } else if (id == R.id.nav_logout) {
             SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
             SharedPreferences.Editor editor = pref.edit();
