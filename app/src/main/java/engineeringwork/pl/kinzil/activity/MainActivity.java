@@ -27,6 +27,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.cast.CastRemoteDisplayLocalService;
@@ -125,11 +126,15 @@ public class MainActivity extends AppCompatActivity
             setUserWeight(tmp.getWeight());
             setUserOverallDistance(tmp.getAllDistance());
         } else {
-            setmWheelSize(1800);
-            setUserWeight(80);
-            setUserOverallDistance(0.0);
+            tmp.setAllDistance(0.0);
+            tmp.setWeight(90);
+            tmp.setWheelSize(1800);
+            tmp.setLogin(login);
+            db.settingInsert(tmp);
+            setmWheelSize(tmp.getWheelSize());
+            setUserWeight(tmp.getWeight());
+            setUserOverallDistance(tmp.getAllDistance());
         }
-
     }
 
     @Override
@@ -342,6 +347,11 @@ public class MainActivity extends AppCompatActivity
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+        }
+
+        public void setOverallDistance()
+        {
+            counterFragment.setOverall();
         }
 
         public void setStart(Boolean start)

@@ -19,6 +19,7 @@ import java.util.Calendar;
 import engineeringwork.pl.kinzil.R;
 import engineeringwork.pl.kinzil.activity.MainActivity;
 import engineeringwork.pl.kinzil.containers.DatabaseHelper;
+import engineeringwork.pl.kinzil.containers.Setting;
 import engineeringwork.pl.kinzil.containers.Trip;
 
 public class CounterFragment extends Fragment {
@@ -29,7 +30,7 @@ public class CounterFragment extends Fragment {
     boolean isTripStarted, isTripStopped = false;
     DatabaseHelper db;
     TextView averageSpeedTextView, maxSpeedTextView, distanceTextView, speedTextView, timeTextView, timeWithStopsTextView, caloriesTextView;
-
+    TextView overallTextView;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -44,8 +45,10 @@ public class CounterFragment extends Fragment {
         maxSpeedTextView = (TextView) view.findViewById(R.id.result4);
         speedTextView = (TextView) view.findViewById(R.id.result6);
         caloriesTextView = (TextView) view.findViewById(R.id.result5);
-        maxSpeed = 0;
+        overallTextView = (TextView)  view.findViewById(R.id.result1);
 
+        maxSpeed = 0;
+        setOverall();
         return view;
     }
 
@@ -85,6 +88,9 @@ public class CounterFragment extends Fragment {
         String  login = ((MainActivity)getActivity()).getLogin();
         Trip newTrip = new Trip(0, login, maxSpeed, averageSpeed, distance/1000, (int)calories, time, date, map, timeNoStops, averageSpeedNoStops);
         db.tripInsert(newTrip);
+        Setting tmp = db.getFirstLoginSetting(login);
+        tmp.setAllDistance(MainActivity.getUserOverallDistance());
+        db.settingUpdate(tmp);
         Toast.makeText((MainActivity)getActivity(), "Trip saved", Toast.LENGTH_LONG).show();
     }
 
@@ -157,7 +163,6 @@ public class CounterFragment extends Fragment {
         distanceTextView.setText(distanceString);
 
         MainActivity.setUserOverallDistance(MainActivity.getUserOverallDistance() + newDistance);
-        TextView overallTextView = (TextView)  view.findViewById(R.id.result1);
         String overallString =  String.format("%.2f", MainActivity.getUserOverallDistance()/1000);
         overallTextView.setText(overallString);
 
@@ -187,5 +192,11 @@ public class CounterFragment extends Fragment {
         }
 
 
+    }
+
+    public void setOverall()
+    {
+        String overallString =  String.format("%.2f", MainActivity.getUserOverallDistance());
+        overallTextView.setText(overallString);
     }
 }
