@@ -34,6 +34,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import engineeringwork.pl.kinzil.R;
+import engineeringwork.pl.kinzil.activity.MainActivity;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback {
     View view;
@@ -54,7 +55,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     public String getMapMain()
     {
-        JSONObject map = new JSONObject();
         try {
             JSONObject mainObj = new JSONObject();
             JSONArray locationArray = new JSONArray();
@@ -204,13 +204,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                     mMap.animateCamera(cu);
                 }
                 if(isStart) {
-                    if (locationArrayListMain.size() == 0) {
-                        locationArrayListMain.add(location);
-                    } else {
-                        if (checkLocation(locationArrayListMain.get(locationArrayListMain.size() - 1), location)) {
+                    if(((MainActivity)getActivity()).getmSectionsPagerAdapter().getActualSpeed() > 0) {
+                        if (locationArrayListMain.size() == 0) {
                             locationArrayListMain.add(location);
-                            if (popUpMapMenu.getMapSetting().isShowRoute()) {
-                                drawPrimaryLinePath();
+                        } else {
+                            if (checkLocation(locationArrayListMain.get(locationArrayListMain.size() - 1), location)) {
+                                locationArrayListMain.add(location);
+                                if (popUpMapMenu.getMapSetting().isShowRoute()) {
+                                    drawPrimaryLinePath();
+                                }
                             }
                         }
                     }

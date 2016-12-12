@@ -341,9 +341,9 @@ public class MainActivity extends AppCompatActivity
             }
         }
 
-        public void setOverallDistance()
+        public Double getActualSpeed()
         {
-            counterFragment.setOverall();
+            return counterFragment.getSpeed();
         }
 
         public void setStart(Boolean start)

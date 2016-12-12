@@ -31,6 +31,11 @@ public class CounterFragment extends Fragment {
     DatabaseHelper db;
     TextView averageSpeedTextView, maxSpeedTextView, distanceTextView, speedTextView, timeTextView, timeWithStopsTextView, caloriesTextView;
     TextView overallTextView;
+
+    public synchronized double getSpeed() {
+        return speed;
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
