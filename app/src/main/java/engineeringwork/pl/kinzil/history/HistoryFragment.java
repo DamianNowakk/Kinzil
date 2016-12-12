@@ -102,13 +102,15 @@ public class HistoryFragment extends ListFragment implements
         TextView avgSpeedWithoutStops = (TextView) detailsView.findViewById(R.id.avgSpeedWithoutStops);
         TextView durationWithoutStops = (TextView) detailsView.findViewById(R.id.durationWithoutStops);
 
-        avgSpeed.setText(String.valueOf(trip.getAvgSpeed()) + " " +  getString(R.string.speed_unit));
+
+
+        avgSpeed.setText(String.valueOf(String.format("%.1f",trip.getAvgSpeed())) + " " +  getString(R.string.speed_unit));
         date.setText(String.valueOf(trip.getDate()));
-        distance.setText(String.valueOf(trip.getDistance()) + " " + getString(R.string.distance_unit));
-        maxSpeed.setText(String.valueOf(trip.getMaxSpeed()) + " " +  getString(R.string.speed_unit));
+        distance.setText(String.valueOf(String.format("%.1f",trip.getDistance())) + " " + getString(R.string.distance_unit));
+        maxSpeed.setText(String.valueOf(String.format("%.1f",trip.getMaxSpeed())) + " " +  getString(R.string.speed_unit));
         calories.setText(String.valueOf(trip.getCalories()) + " " +  getString(R.string.calories_unit));
         duration.setText(String.valueOf(trip.getTime()));
-        avgSpeedWithoutStops.setText(String.valueOf(trip.getAvgSpeedNoStop()) + " " +  getString(R.string.speed_unit));
+        avgSpeedWithoutStops.setText(String.valueOf(String.format("%.1f",trip.getAvgSpeedNoStop())) + " " +  getString(R.string.speed_unit));
         durationWithoutStops.setText(String.valueOf(trip.getRideTime()));
         try {
             setMapSecondary(trip.getMap());
@@ -191,17 +193,6 @@ public class HistoryFragment extends ListFragment implements
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
-//        if (ContextCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_FINE_LOCATION)
-//                == PackageManager.PERMISSION_GRANTED) {
-//            mMap.setMyLocationEnabled(true);
-//        } else {
-//            if (ContextCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION)
-//                    == PackageManager.PERMISSION_GRANTED) {
-//                mMap.setMyLocationEnabled(true);
-//            }
-//        }
-
         mMap.getUiSettings().setCompassEnabled(false);
         mMap.getUiSettings().setIndoorLevelPickerEnabled(false);
         mMap.getUiSettings().setMapToolbarEnabled(false);
