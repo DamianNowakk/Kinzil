@@ -136,7 +136,6 @@ public class BluetoothFragment extends Fragment {
                     buttonOne.setEnabled(true);
                     mScanning = false;
                     mBluetoothAdapter.stopLeScan(mLeScanCallback);
-                    //invalidateOptionsMenu();
                 }
             }, SCAN_TIME);
             buttonOne.setEnabled(false);

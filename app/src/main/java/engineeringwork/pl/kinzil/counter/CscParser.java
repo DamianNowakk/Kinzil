@@ -4,7 +4,7 @@ import com.movisens.smartgattlib.GattByteBuffer;
 
 import engineeringwork.pl.kinzil.activity.MainActivity;
 
-public class CscAnalyser { //TODO zmiana kodu
+public class CscParser {
     public Long currCumulativeWheelRevolutions, prevCumulativeWheelRevolutions;
     public float currLastWheelEventTime, prevLastWheelEventTime;
     private double speed, speedKmH, newDistance;

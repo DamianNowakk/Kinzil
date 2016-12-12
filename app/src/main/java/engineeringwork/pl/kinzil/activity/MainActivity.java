@@ -1,7 +1,6 @@
 package engineeringwork.pl.kinzil.activity;
 
 import android.bluetooth.BluetoothGattCharacteristic;
-import android.bluetooth.BluetoothGattService;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -27,17 +26,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.cast.CastRemoteDisplayLocalService;
-import com.movisens.smartgattlib.Characteristic;
-
 import org.json.JSONException;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 import engineeringwork.pl.kinzil.R;
 import engineeringwork.pl.kinzil.bluetooth.BluetoothFragment;
@@ -362,8 +353,6 @@ public class MainActivity extends AppCompatActivity
 
         @Override
         public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
             if (position == 0) {
                 return counterFragment;
             } else if (position == 1) {

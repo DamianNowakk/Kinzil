@@ -1,4 +1,5 @@
 /*
+ * zrodlo: https://github.com/movisens/android-SmartGattLib-Example
  * Copyright (C) 2013 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -49,7 +50,7 @@ public class BluetoothLeService extends Service {
     private String mBluetoothDeviceAddress;
     private BluetoothGatt mBluetoothGatt;
     private int mConnectionState = STATE_DISCONNECTED;
-    private CscAnalyser mCscAnalyser = new CscAnalyser();
+    private CscParser cscParser = new CscParser();
 
     private static final int STATE_DISCONNECTED = 0;
     private static final int STATE_CONNECTING = 1;
@@ -120,20 +121,20 @@ public class BluetoothLeService extends Service {
         UUID characteristicUuid = characteristic.getUuid();
         final byte[] data = characteristic.getValue();
         if (Characteristic.CSC_MEASUREMENT.equals(characteristicUuid)){
-            mCscAnalyser.getData(data);
-            mCscAnalyser.processData();
+            cscParser.getData(data);
+            cscParser.processData();
 
-            intent.putExtra(EXTRA_DATA, "Wheel Turns: " + mCscAnalyser.currCumulativeWheelRevolutions + "\n"
-                    + "Wheel Time: " + mCscAnalyser.currLastWheelEventTime + "\n"
-                    + "Speed: " + mCscAnalyser.getSpeed() + "\n");
-            intent.putExtra("EXTRA_SPEED", String.valueOf(mCscAnalyser.getSpeedKmH()));
-            intent.putExtra("NEW_DISTANCE", mCscAnalyser.getNewDistance());
+            intent.putExtra(EXTRA_DATA, "Wheel Turns: " + cscParser.currCumulativeWheelRevolutions + "\n"
+                    + "Wheel Time: " + cscParser.currLastWheelEventTime + "\n"
+                    + "Speed: " + cscParser.getSpeed() + "\n");
+            intent.putExtra("EXTRA_SPEED", String.valueOf(cscParser.getSpeedKmH()));
+            intent.putExtra("NEW_DISTANCE", cscParser.getNewDistance());
         }
         sendBroadcast(intent);
     }
 
     public void reset() {
-        mCscAnalyser.reset();
+        cscParser.reset();
     }
 
     public class LocalBinder extends Binder {
